@@ -1,13 +1,23 @@
-import { FC, useState } from 'react';
+import { FC, FormEvent, FormEventHandler, useState } from 'react';
 import closeEyeIcon from '../../../assets/img/close-eye.png';
 import openEyeIcon from '../../../assets/img/open-eye.png';
-// import './loginForm.css';
+import login from '../../../api/loginRequest';
 
 type PasswordType = 'password' | 'text';
 
 const LoginForm: FC = () => {
+  const [emailValue, setEmailValue] = useState<string>('');
+  const [passwordValue, setPasswordValue] = useState<string>('');
   const [passwordType, setPasswordType] = useState<PasswordType>('password');
   const [iconPath, setIconPath] = useState<string>(closeEyeIcon);
+
+  const handleEmailChange = (newValue: string) => {
+    setEmailValue(newValue);
+  };
+
+  const handlePasswordChange = (newValue: string) => {
+    setPasswordValue(newValue);
+  };
 
   const togglePassword = () => {
     if (passwordType === 'password') {
@@ -19,34 +29,36 @@ const LoginForm: FC = () => {
     }
   };
 
-  const handleSubmit = () => {};
-
-  const handleInput = () => {};
+  const handleSubmit: FormEventHandler<HTMLFormElement> = async (
+    event: FormEvent<HTMLFormElement>
+  ) => {
+    event.preventDefault();
+    await login(emailValue, passwordValue);
+  };
 
   return (
-    <div className="login">
-      <h3 className="heading login__heading">login</h3>
-      <form className="login__form" onSubmit={() => handleSubmit}>
+    <form className="login__form" onSubmit={handleSubmit}>
+      <input
+        className={`input login__input`}
+        value={emailValue}
+        type="text"
+        placeholder="Email"
+        onChange={(e) => handleEmailChange(e.target.value)}
+      />
+      <div className="password__wrapper">
         <input
-          className={`input login__input`}
-          type="text"
-          placeholder="Email"
-          onInput={handleInput}
+          className={`input login__input input_password`}
+          value={passwordValue}
+          type={passwordType}
+          placeholder="Password"
+          onChange={(e) => handlePasswordChange(e.target.value)}
         />
-        <div className="password__wrapper">
-          <input
-            className={`input login__input input_password`}
-            type={passwordType}
-            placeholder="Password"
-            onInput={handleInput}
-          />
-          <img src={iconPath} className="icon_eye" onClick={togglePassword} />
-        </div>
-        <button className="button login__button" type="submit">
-          login
-        </button>
-      </form>
-    </div>
+        <img src={iconPath} className="icon_eye" onClick={togglePassword} />
+      </div>
+      <button className="button login__button" type="submit">
+        login
+      </button>
+    </form>
   );
 };
 
