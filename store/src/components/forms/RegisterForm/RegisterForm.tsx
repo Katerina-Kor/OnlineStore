@@ -38,7 +38,7 @@ const RegisterForm: FC = () => {
       await register(emailValue, passwordValue);
       await login(emailValue, passwordValue);
     } catch (error) {
-      console.log(error)
+      console.log(error);
     }
   };
 

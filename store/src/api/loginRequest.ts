@@ -2,8 +2,8 @@ import { BASE_URL } from '../constants/apiConstants';
 import tokenStorageInstance from '../utils/tokenStorage/tokenStorage';
 
 type LoginData = {
-  data: { token: string };
-  error: null;
+  data: { token: string } | null;
+  error: { message: string } | null;
 };
 
 const login = async (email: string, password: string) => {
@@ -20,9 +20,12 @@ const login = async (email: string, password: string) => {
     });
 
     const data: LoginData = await responce.json();
-    tokenStorageInstance.setToken(data.data.token);
+    if (data.error) {
+      throw new Error(data.error.message);
+    }
+    data.data && tokenStorageInstance.setToken(data.data.token);
   } catch (error) {
-    console.log('error');
+    console.log('login error');
     throw error;
   }
 };
