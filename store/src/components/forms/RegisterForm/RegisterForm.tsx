@@ -37,33 +37,30 @@ const RegisterForm: FC = () => {
     try {
       await register(emailValue, passwordValue);
       await login(emailValue, passwordValue);
-    } catch (error) {
-      console.log(error);
+    } catch (e) {
+      // TODO:
+      // handle errors
     }
   };
 
   return (
-    <form className="login__form" onSubmit={handleSubmit}>
+    <form onSubmit={handleSubmit}>
       <input
-        className={`input login__input`}
         value={emailValue}
         type="text"
         placeholder="Email"
         onChange={(e) => handleEmailChange(e.target.value)}
       />
-      <div className="password__wrapper">
+      <div>
         <input
-          className={`input login__input input_password`}
           value={passwordValue}
           type={passwordType}
           placeholder="Password"
           onChange={(e) => handlePasswordChange(e.target.value)}
         />
-        <img src={iconPath} className="icon_eye" onClick={togglePassword} />
+        <img src={iconPath} onClick={togglePassword} />
       </div>
-      <button className="button login__button" type="submit">
-        register
-      </button>
+      <button type="submit">register</button>
     </form>
   );
 };

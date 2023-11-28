@@ -1,9 +1,8 @@
 class TokenStorage {
   private token: string;
-  private lsKey: string;
+  private lsKey: string = 'userLoginToken';
 
   constructor() {
-    this.lsKey = 'userLoginToken';
     this.token = localStorage.getItem(this.lsKey) || '';
   }
 

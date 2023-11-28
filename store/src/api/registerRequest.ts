@@ -1,14 +1,13 @@
 import { BASE_URL } from '../constants/apiConstants';
+import { ErrorResponce, isError } from '../types/apiTypes';
 
-type RegisterData = {
+type SuccessRegisterResponce = {
   data: {
     id: string;
     email: string;
     role: 'admin' | 'user';
-  } | null;
-  error: {
-    message: string;
-  } | null;
+  };
+  error: null;
 };
 
 const register = async (email: string, password: string) => {
@@ -24,12 +23,11 @@ const register = async (email: string, password: string) => {
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify(body),
     });
-    const data: RegisterData = await responce.json();
-    if (data.error) {
+    const data: SuccessRegisterResponce | ErrorResponce = await responce.json();
+    if (isError(data)) {
       throw new Error(data.error.message);
     }
   } catch (error) {
-    console.log('register error');
     throw error;
   }
 };

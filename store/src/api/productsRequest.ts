@@ -1,21 +1,15 @@
 import { BASE_URL } from '../constants/apiConstants';
+import { ErrorResponce, ProductData, isError } from '../types/apiTypes';
 import tokenStorageInstance from '../utils/tokenStorage/tokenStorage';
 
-type ProductsListResponce = {
-  data: ProductData[] | null;
-  error: { message: string } | null;
+type SuccessProductsListResponce = {
+  data: ProductData[];
+  error: null;
 };
 
-type ProductResponce = {
-  data: ProductData | null;
-  error: { message: string } | null;
-};
-
-type ProductData = {
-  id: string;
-  title: string;
-  description: string;
-  price: number;
+type SuccessProductResponce = {
+  data: ProductData;
+  error: null;
 };
 
 const getProductsList = async () => {
@@ -25,13 +19,13 @@ const getProductsList = async () => {
       headers: { Authorization: `Bearer ${tokenStorageInstance.getToken()}` },
     });
 
-    const data: ProductsListResponce = await responce.json();
-    if (data.error) {
+    const data: SuccessProductsListResponce | ErrorResponce =
+      await responce.json();
+    if (isError(data)) {
       throw new Error(data.error.message);
     }
-    return data.data || [];
+    return data.data;
   } catch (error) {
-    console.log('products list error');
     throw error;
   }
 };
@@ -43,13 +37,12 @@ const getProductById = async (productId: string) => {
       headers: { Authorization: `Bearer ${tokenStorageInstance.getToken()}` },
     });
 
-    const data: ProductResponce = await responce.json();
-    if (data.error) {
+    const data: SuccessProductResponce | ErrorResponce = await responce.json();
+    if (isError(data)) {
       throw new Error(data.error.message);
     }
-    return data.data || {};
+    return data.data;
   } catch (error) {
-    console.log('product by id error');
     throw error;
   }
 };

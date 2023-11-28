@@ -1,9 +1,10 @@
 import { BASE_URL } from '../constants/apiConstants';
+import { ErrorResponce, isError } from '../types/apiTypes';
 import tokenStorageInstance from '../utils/tokenStorage/tokenStorage';
 
-type LoginData = {
-  data: { token: string } | null;
-  error: { message: string } | null;
+type SuccessLoginResponce = {
+  data: { token: string };
+  error: null;
 };
 
 const login = async (email: string, password: string) => {
@@ -19,13 +20,12 @@ const login = async (email: string, password: string) => {
       headers: { 'Content-Type': 'application/json' },
     });
 
-    const data: LoginData = await responce.json();
-    if (data.error) {
+    const data: SuccessLoginResponce | ErrorResponce = await responce.json();
+    if (isError(data)) {
       throw new Error(data.error.message);
     }
     data.data && tokenStorageInstance.setToken(data.data.token);
   } catch (error) {
-    console.log('login error');
     throw error;
   }
 };
