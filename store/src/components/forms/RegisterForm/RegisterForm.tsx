@@ -3,6 +3,7 @@ import closeEyeIcon from '../../../assets/img/close-eye.png';
 import openEyeIcon from '../../../assets/img/open-eye.png';
 import login from '../../../api/loginRequest';
 import register from '../../../api/registerRequest';
+import { useNavigate } from 'react-router-dom';
 
 type PasswordType = 'password' | 'text';
 
@@ -11,6 +12,7 @@ const RegisterForm: FC = () => {
   const [passwordValue, setPasswordValue] = useState<string>('');
   const [passwordType, setPasswordType] = useState<PasswordType>('password');
   const [iconPath, setIconPath] = useState<string>(closeEyeIcon);
+  const navigate = useNavigate();
 
   const handleEmailChange = (newValue: string) => {
     setEmailValue(newValue);
@@ -37,6 +39,7 @@ const RegisterForm: FC = () => {
     try {
       await register(emailValue, passwordValue);
       await login(emailValue, passwordValue);
+      navigate('/products');
     } catch (e) {
       // TODO:
       // handle errors
