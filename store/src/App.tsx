@@ -1,14 +1,8 @@
 import './App.css';
-import LoginPage from './components/pages/LoginPage/LoginPage';
-import RegisterPage from './components/pages/RegisterPage/RegisterPage';
+import AppRouter from './components/router/AppRouter';
 
 function App() {
-  return (
-    <>
-      <RegisterPage />
-      <LoginPage />
-    </>
-  );
+  return <AppRouter />;
 }
 
 export default App;
