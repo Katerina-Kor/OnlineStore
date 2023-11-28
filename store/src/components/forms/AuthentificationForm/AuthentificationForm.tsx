@@ -3,16 +3,18 @@ import closeEyeIcon from '../../../assets/img/close-eye.png';
 import openEyeIcon from '../../../assets/img/open-eye.png';
 import login from '../../../api/loginRequest';
 import register from '../../../api/registerRequest';
-import { useNavigate } from 'react-router-dom';
+import { useLocation, useNavigate } from 'react-router-dom';
 
 type PasswordType = 'password' | 'text';
 
-const RegisterForm: FC = () => {
+const AuthentificationForm: FC = () => {
   const [emailValue, setEmailValue] = useState<string>('');
   const [passwordValue, setPasswordValue] = useState<string>('');
   const [passwordType, setPasswordType] = useState<PasswordType>('password');
   const [iconPath, setIconPath] = useState<string>(closeEyeIcon);
   const navigate = useNavigate();
+  const location = useLocation();
+  const isRegisterPage: boolean = location.pathname === '/register';
 
   const handleEmailChange = (newValue: string) => {
     setEmailValue(newValue);
@@ -37,7 +39,9 @@ const RegisterForm: FC = () => {
   ) => {
     event.preventDefault();
     try {
-      await register(emailValue, passwordValue);
+      if (isRegisterPage) {
+        await register(emailValue, passwordValue);
+      }
       await login(emailValue, passwordValue);
       navigate('/products');
     } catch (e) {
@@ -63,9 +67,9 @@ const RegisterForm: FC = () => {
         />
         <img src={iconPath} onClick={togglePassword} />
       </div>
-      <button type="submit">register</button>
+      <button type="submit">{isRegisterPage ? 'register' : 'login'}</button>
     </form>
   );
 };
 
-export default RegisterForm;
+export default AuthentificationForm;
