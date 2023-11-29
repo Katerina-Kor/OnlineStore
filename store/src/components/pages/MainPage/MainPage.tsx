@@ -10,6 +10,7 @@ const MainPage: FC = () => {
       <p>Please, login to see products</p>
       <button onClick={() => navigate('/login')}>login</button>
       <button onClick={() => navigate('/register')}>register</button>
+      <button onClick={() => navigate('/cart')}>to cart</button>
     </div>
   );
 };

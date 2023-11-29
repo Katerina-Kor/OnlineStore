@@ -13,3 +13,16 @@ export type ProductData = {
   description: string;
   price: number;
 };
+
+type ProductsInfoInCart = {
+  product: ProductData;
+  count: number;
+};
+
+export type CartData = {
+  cart: {
+    id: string;
+    items: ProductsInfoInCart[];
+  };
+  total: number;
+};
