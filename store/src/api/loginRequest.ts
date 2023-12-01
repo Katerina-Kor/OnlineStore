@@ -1,5 +1,6 @@
 import { BASE_URL } from '../constants/apiConstants';
 import { ErrorResponce, isError } from '../types/apiTypes';
+import ValidationError from '../utils/customError/ValidationError';
 import tokenStorageInstance from '../utils/tokenStorage/tokenStorage';
 
 type SuccessLoginResponce = {
@@ -22,7 +23,8 @@ const login = async (email: string, password: string) => {
 
     const data: SuccessLoginResponce | ErrorResponce = await responce.json();
     if (isError(data)) {
-      throw new Error(data.error.message);
+      throw new ValidationError(data.error.message, responce.status);
+      // throw new Error(data.error.message);
     }
     data.data && tokenStorageInstance.setToken(data.data.token);
   } catch (error) {

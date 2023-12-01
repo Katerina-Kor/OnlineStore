@@ -1,4 +1,4 @@
-import { FC, useState } from 'react';
+import { FC, useContext, useState } from 'react';
 import loginUser from '../../../api/loginRequest';
 import registerUser from '../../../api/registerRequest';
 import { useNavigate } from 'react-router-dom';
@@ -16,6 +16,8 @@ import {
   emailValidationRules,
   passwordValidationRules,
 } from '../../../utils/authFormValidation/authFormValidate';
+import { ChangeAuthContext } from '../../context/AuthContext';
+// import ValidationError from '../../../utils/customError/ValidationError';
 
 type PasswordType = 'password' | 'text';
 
@@ -42,6 +44,7 @@ const AuthentificationForm: FC<AuthentificationFormProps> = ({ formType }) => {
 
   const [passwordType, setPasswordType] = useState<PasswordType>('password');
   const navigate = useNavigate();
+  const changeLoginStatus = useContext(ChangeAuthContext);
 
   const isRegisterPage = formType === 'register';
   const buttonName = formType === 'login' ? 'Login' : 'Sign Up';
@@ -67,6 +70,7 @@ const AuthentificationForm: FC<AuthentificationFormProps> = ({ formType }) => {
       }
       await loginUser(data.emailRequired, data.passwordRequired);
       reset();
+      changeLoginStatus(true);
       navigate('/products');
     } catch (e) {
       // TODO: обработать конкретные ответы сервера

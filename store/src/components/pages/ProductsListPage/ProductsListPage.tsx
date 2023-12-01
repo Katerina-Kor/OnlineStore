@@ -1,12 +1,16 @@
-import { FC, useEffect, useState } from 'react';
+import { FC, useContext, useEffect, useState } from 'react';
 import { getProductsList } from '../../../api/productsRequest';
 import { ProductData } from '../../../types/apiTypes';
 import { useNavigate } from 'react-router-dom';
 import { updateCart } from '../../../api/cartRequests';
+import { Button, Link, Stack, Typography } from '@mui/material';
+import { AuthContext } from '../../context/AuthContext';
 
 const ProductsListPage: FC = () => {
-  const [products, setProducts] = useState<ProductData[]>([]);
+  const [products, setProducts] = useState<ProductData[] | null>(null);
   const navigate = useNavigate();
+  const isLogged = useContext(AuthContext);
+
   useEffect(() => {
     const fetchData = async () => {
       try {
@@ -27,27 +31,60 @@ const ProductsListPage: FC = () => {
     } catch (error) {}
   };
 
+  if (!isLogged) {
+    return (
+      <Stack spacing={2} justifyContent={'center'}>
+        <Link href="/login" variant="h5">
+          Please, login to continue
+        </Link>
+      </Stack>
+    );
+  }
+
   return (
-    <div>
-      <h3>products list</h3>
-      {products.length > 0 ? (
+    <Stack spacing={2} justifyContent={'center'}>
+      <Typography
+        component="h2"
+        variant="h3"
+        padding="20px"
+        textAlign={'center'}
+      >
+        Products list
+      </Typography>
+      {products ? (
         products.map((product) => (
-          <div
+          <Stack
+            padding={1}
+            spacing={1}
+            justifyContent={'center'}
+            alignItems={'center'}
+            sx={{ border: '1px solid gray', borderRadius: '5px' }}
             key={product.id}
             onClick={(event) => {
               if (event.target instanceof HTMLButtonElement) return;
               navigate(`/products/${product.id}`);
             }}
           >
-            <p>{product.title}</p>
-            <p>{product.price}</p>
-            <button onClick={() => addToCart(product.id)}>Add to card</button>
-          </div>
+            <Typography variant="body1" textAlign={'center'}>
+              {product.title}
+            </Typography>
+            <Typography variant="body1" textAlign={'center'}>
+              {product.price}
+            </Typography>
+            <Button
+              onClick={() => addToCart(product.id)}
+              variant="outlined"
+              type="button"
+              sx={{ width: 'fit-content' }}
+            >
+              Add to card
+            </Button>
+          </Stack>
         ))
       ) : (
         <p>Loading...</p>
       )}
-    </div>
+    </Stack>
   );
 };
 
