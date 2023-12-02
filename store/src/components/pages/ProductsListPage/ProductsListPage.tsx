@@ -26,7 +26,7 @@ const ProductsListPage: FC = () => {
           } else {
             setError(e.message);
           }
-        } else if(e instanceof Error) {
+        } else if (e instanceof Error) {
           setError(e.message);
         } else {
           throw error;
@@ -54,9 +54,7 @@ const ProductsListPage: FC = () => {
   }
 
   if (error) {
-    return (
-      <p>{error}</p>
-    )
+    return <p>{error}</p>;
   }
 
   return (

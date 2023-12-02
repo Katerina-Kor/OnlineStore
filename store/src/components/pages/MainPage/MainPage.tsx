@@ -1,11 +1,9 @@
-import { Button, Stack, Typography } from '@mui/material';
+import { Stack, Typography } from '@mui/material';
 import { FC, useContext } from 'react';
-import { useNavigate } from 'react-router-dom';
 import { AuthContext } from '../../context/AuthContext';
 
 const MainPage: FC = () => {
   const isLogged = useContext(AuthContext);
-  const navigate = useNavigate();
   return (
     <Stack spacing={1} justifyContent={'center'}>
       <Typography
@@ -24,47 +22,6 @@ const MainPage: FC = () => {
           Please, login to see products
         </Typography>
       )}
-      <Stack
-        spacing={1}
-        direction={'row'}
-        justifyContent={'center'}
-        padding={2}
-      >
-        <Button
-          onClick={() => navigate('/register')}
-          variant="outlined"
-          color="secondary"
-        >
-          sign up
-        </Button>
-
-        {isLogged ? (
-          <>
-            <Button
-              onClick={() => navigate('/cart')}
-              variant="outlined"
-              color="secondary"
-            >
-              cart
-            </Button>
-            <Button
-              onClick={() => navigate('/products')}
-              variant="outlined"
-              color="secondary"
-            >
-              products
-            </Button>
-          </>
-        ) : (
-          <Button
-            onClick={() => navigate('/login')}
-            variant="outlined"
-            color="secondary"
-          >
-            login
-          </Button>
-        )}
-      </Stack>
     </Stack>
   );
 };
