@@ -24,7 +24,6 @@ const login = async (email: string, password: string) => {
     const data: SuccessLoginResponce | ErrorResponce = await responce.json();
     if (isError(data)) {
       throw new ValidationError(data.error.message, responce.status);
-      // throw new Error(data.error.message);
     }
     data.data && tokenStorageInstance.setToken(data.data.token);
   } catch (error) {

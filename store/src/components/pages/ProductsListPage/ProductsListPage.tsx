@@ -4,12 +4,15 @@ import { ProductData } from '../../../types/apiTypes';
 import { useNavigate } from 'react-router-dom';
 import { updateCart } from '../../../api/cartRequests';
 import { Button, Link, Stack, Typography } from '@mui/material';
-import { AuthContext } from '../../context/AuthContext';
+import { AuthContext, ChangeAuthContext } from '../../context/AuthContext';
+import ValidationError from '../../../utils/customError/ValidationError';
 
 const ProductsListPage: FC = () => {
   const [products, setProducts] = useState<ProductData[] | null>(null);
+  const [error, setError] = useState<string | null>(null);
   const navigate = useNavigate();
   const isLogged = useContext(AuthContext);
+  const changeLoginStatus = useContext(ChangeAuthContext);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -17,8 +20,17 @@ const ProductsListPage: FC = () => {
         const responce = await getProductsList();
         setProducts(responce);
       } catch (e) {
-        // TODO:
-        // handle errors
+        if (e instanceof ValidationError) {
+          if (e.statusCode === 401) {
+            changeLoginStatus(false);
+          } else {
+            setError(e.message);
+          }
+        } else if(e instanceof Error) {
+          setError(e.message);
+        } else {
+          throw error;
+        }
       }
     };
 
@@ -39,6 +51,12 @@ const ProductsListPage: FC = () => {
         </Link>
       </Stack>
     );
+  }
+
+  if (error) {
+    return (
+      <p>{error}</p>
+    )
   }
 
   return (

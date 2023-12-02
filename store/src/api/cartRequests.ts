@@ -1,5 +1,6 @@
 import { BASE_URL } from '../constants/apiConstants';
 import { CartData, ErrorResponce, isError } from '../types/apiTypes';
+import ValidationError from '../utils/customError/ValidationError';
 import tokenStorageInstance from '../utils/tokenStorage/tokenStorage';
 
 type SuccessCartResponce = {
@@ -22,7 +23,7 @@ const getCart = async () => {
 
     const data: SuccessCartResponce | ErrorResponce = await responce.json();
     if (isError(data)) {
-      throw new Error(data.error.message);
+      throw new ValidationError(data.error.message, responce.status);
     }
     return data.data;
   } catch (error) {
@@ -47,7 +48,7 @@ const updateCart = async (productId: string, count: number) => {
 
     const data: SuccessCartResponce | ErrorResponce = await responce.json();
     if (isError(data)) {
-      throw new Error(data.error.message);
+      throw new ValidationError(data.error.message, responce.status);
     }
     return data.data;
   } catch (error) {
@@ -68,7 +69,7 @@ const deleteCart = async () => {
     const data: SuccessCartDeletionResponce | ErrorResponce =
       await responce.json();
     if (isError(data)) {
-      throw new Error(data.error.message);
+      throw new ValidationError(data.error.message, responce.status);
     }
   } catch (error) {
     throw error;

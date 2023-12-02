@@ -1,5 +1,6 @@
 import { BASE_URL } from '../constants/apiConstants';
 import { ErrorResponce, isError } from '../types/apiTypes';
+import ValidationError from '../utils/customError/ValidationError';
 
 type SuccessRegisterResponce = {
   data: {
@@ -25,7 +26,7 @@ const register = async (email: string, password: string) => {
     });
     const data: SuccessRegisterResponce | ErrorResponce = await responce.json();
     if (isError(data)) {
-      throw new Error(data.error.message);
+      throw new ValidationError(data.error.message, responce.status);
     }
   } catch (error) {
     throw error;

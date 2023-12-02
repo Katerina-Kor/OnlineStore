@@ -70,5 +70,3 @@ const MainPage: FC = () => {
 };
 
 export default MainPage;
-
-//"button" | "caption" | "subtitle1" | "subtitle2" | "body1" | "body2" | "overline"

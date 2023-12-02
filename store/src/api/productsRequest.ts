@@ -1,5 +1,6 @@
 import { BASE_URL } from '../constants/apiConstants';
 import { ErrorResponce, ProductData, isError } from '../types/apiTypes';
+import ValidationError from '../utils/customError/ValidationError';
 import tokenStorageInstance from '../utils/tokenStorage/tokenStorage';
 
 type SuccessProductsListResponce = {
@@ -22,7 +23,7 @@ const getProductsList = async () => {
     const data: SuccessProductsListResponce | ErrorResponce =
       await responce.json();
     if (isError(data)) {
-      throw new Error(data.error.message);
+      throw new ValidationError(data.error.message, responce.status);
     }
     return data.data;
   } catch (error) {
@@ -39,7 +40,7 @@ const getProductById = async (productId: string) => {
 
     const data: SuccessProductResponce | ErrorResponce = await responce.json();
     if (isError(data)) {
-      throw new Error(data.error.message);
+      throw new ValidationError(data.error.message, responce.status);
     }
     return data.data;
   } catch (error) {
