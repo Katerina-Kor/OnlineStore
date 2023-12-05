@@ -14,6 +14,11 @@ class TokenStorage {
     localStorage.setItem(this.lsKey, newToken);
     this.token = newToken;
   }
+
+  public clearToken(): void {
+    localStorage.removeItem(this.lsKey);
+    this.token = null;
+  }
 }
 
 const tokenStorageInstance = new TokenStorage();

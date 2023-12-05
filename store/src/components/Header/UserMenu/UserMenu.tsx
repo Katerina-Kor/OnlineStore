@@ -8,12 +8,14 @@ import {
   Typography,
 } from '@mui/material';
 import { FC, useContext, useState, MouseEvent } from 'react';
-import { AuthContext } from '../../context/AuthContext';
+import { AuthContext, ChangeAuthContext } from '../../context/AuthContext';
 import { useNavigate } from 'react-router-dom';
+import tokenStorageInstance from '../../../utils/tokenStorage/tokenStorage';
 
 const UserMenu: FC = () => {
   const [anchorElUser, setAnchorElUser] = useState<null | HTMLElement>(null);
   const isLogged = useContext(AuthContext);
+  const changeLoginStatus = useContext(ChangeAuthContext);
   const navigate = useNavigate();
 
   const handleOpenUserMenu = (event: MouseEvent<HTMLElement>) => {
@@ -31,7 +33,8 @@ const UserMenu: FC = () => {
 
   const handleClickLogout = () => {
     handleCloseUserMenu();
-    // TODO add action to logout
+    tokenStorageInstance.clearToken();
+    changeLoginStatus(false);
   };
 
   const handleClickSignUp = () => {

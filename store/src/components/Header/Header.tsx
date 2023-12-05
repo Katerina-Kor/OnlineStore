@@ -1,15 +1,25 @@
 import {
   AppBar,
   Typography,
-  Link,
   Toolbar,
-  IconButton,
-  Stack,
 } from '@mui/material';
 import { FC, useContext } from 'react';
-import { ShoppingCart } from '@mui/icons-material';
 import UserMenu from './UserMenu/UserMenu';
 import { AuthContext } from '../context/AuthContext';
+import NavLinksList from './NavLinksList/NavLinksList';
+import CartIcon from './CartIcon/CartIcon';
+
+const navLinksForUnloggedUser = [
+  {
+    name: 'Home',
+    href: '/',
+  },
+];
+
+const navLinksForLoggedUser = navLinksForUnloggedUser.concat({
+  name: 'Products',
+  href: '/products',
+});
 
 const Header: FC = () => {
   const isLogged = useContext(AuthContext);
@@ -26,37 +36,9 @@ const Header: FC = () => {
           <Typography variant="h6" color="inherit" noWrap>
             Online Shop
           </Typography>
-          <Stack
-            component="nav"
-            direction="row"
-            justifyContent="center"
-            sx={{ flexGrow: 1 }}
-          >
-            <Link
-              variant="button"
-              color="text.primary"
-              href="/"
-              sx={{ my: 1, mx: 1.5 }}
-            >
-              Home
-            </Link>
-            {isLogged && (
-              <Link
-                variant="button"
-                color="text.primary"
-                href="/products"
-                sx={{ my: 1, mx: 1.5 }}
-              >
-                Products
-              </Link>
-            )}
-          </Stack>
+          <NavLinksList navLinks={isLogged ? navLinksForLoggedUser : navLinksForUnloggedUser} />
           <UserMenu />
-          {isLogged && (
-            <IconButton sx={{ p: 0 }}>
-              <ShoppingCart fontSize="large" color="primary" />
-            </IconButton>
-          )}
+          {isLogged && <CartIcon />}
         </Toolbar>
       </AppBar>
     </>
