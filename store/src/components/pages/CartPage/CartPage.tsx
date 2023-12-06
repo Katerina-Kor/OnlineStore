@@ -5,12 +5,16 @@ import { AuthContext, ChangeAuthContext } from '../../context/AuthContext';
 import ValidationError from '../../../utils/customError/ValidationError';
 import { Link, Stack } from '@mui/material';
 import { Link as RouterLink } from 'react-router-dom';
+import { useDispatch, useSelector } from 'react-redux';
+import { RootState } from '../../../store/store';
+import { setUserLoggedOut } from '../../../store/reducers/authSlice';
 
 const CartPage: FC = () => {
   const [cart, setCart] = useState<CartData>();
   const [error, setError] = useState<string | null>(null);
-  const isLogged = useContext(AuthContext);
-  const changeLoginStatus = useContext(ChangeAuthContext);
+  const isLogged = useSelector((state: RootState) => state.auth.isLogged);
+  const dispatch = useDispatch();
+  // const changeLoginStatus = useContext(ChangeAuthContext);
 
   useEffect(() => {
     if (!isLogged) return;
@@ -21,7 +25,7 @@ const CartPage: FC = () => {
       } catch (e) {
         if (e instanceof ValidationError) {
           if (e.statusCode === 401) {
-            changeLoginStatus(false);
+            dispatch(setUserLoggedOut());
           } else {
             setError(e.message);
           }

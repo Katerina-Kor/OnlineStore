@@ -4,18 +4,20 @@ import AppRouter from './components/router/AppRouter';
 import AuthContextProvider from './components/context/AuthContext';
 import Header from './components/Header/Header';
 import CartContextProvider from './components/context/CartContext';
+import Cover from './components/Cover/Cover';
 
 function App() {
   return (
     <>
-      <AuthContextProvider>
-        <CartContextProvider>
+      {/* <AuthContextProvider> */}
+        {/* <CartContextProvider> */}
           <Header />
           <Box component="main" className={styles.main}>
             <AppRouter />
+            {/* <Cover /> */}
           </Box>
-        </CartContextProvider>
-      </AuthContextProvider>
+        {/* </CartContextProvider> */}
+      {/* </AuthContextProvider> */}
     </>
   );
 }

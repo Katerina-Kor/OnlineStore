@@ -11,11 +11,16 @@ import { FC, useContext, useState, MouseEvent } from 'react';
 import { AuthContext, ChangeAuthContext } from '../../context/AuthContext';
 import { useNavigate } from 'react-router-dom';
 import tokenStorageInstance from '../../../utils/tokenStorage/tokenStorage';
+import { useDispatch, useSelector } from 'react-redux';
+import { RootState } from '../../../store/store';
+import { setUserLoggedOut } from '../../../store/reducers/authSlice';
 
 const UserMenu: FC = () => {
   const [anchorElUser, setAnchorElUser] = useState<null | HTMLElement>(null);
-  const isLogged = useContext(AuthContext);
-  const changeLoginStatus = useContext(ChangeAuthContext);
+  // const isLogged = useContext(AuthContext);
+  // const changeLoginStatus = useContext(ChangeAuthContext);
+  const isLogged = useSelector((state: RootState) => state.auth.isLoggedIn);
+  const dispatch = useDispatch();
   const navigate = useNavigate();
 
   const handleOpenUserMenu = (event: MouseEvent<HTMLElement>) => {
@@ -34,7 +39,7 @@ const UserMenu: FC = () => {
   const handleClickLogout = () => {
     handleCloseUserMenu();
     tokenStorageInstance.clearToken();
-    changeLoginStatus(false);
+    dispatch(setUserLoggedOut());
   };
 
   const handleClickSignUp = () => {

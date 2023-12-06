@@ -14,9 +14,9 @@ const ProductsListPage: FC = () => {
   const navigate = useNavigate();
   const isLogged = useContext(AuthContext);
   const changeLoginStatus = useContext(ChangeAuthContext);
-  const {cartItems, totalItems, isError} = useContext(CartContext);
-  const receiveNewData = useContext(ReceiveNewCartDataContext)
-  console.log(cartItems, totalItems, isError)
+  // const {cartItems, totalItems, isError} = useContext(CartContext);
+  // const receiveNewData = useContext(ReceiveNewCartDataContext)
+  // console.log(cartItems, totalItems, isError)
 
   useEffect(() => {
     if (!isLogged) return;
@@ -45,7 +45,7 @@ const ProductsListPage: FC = () => {
   const addToCart = async (productId: string) => {
     try {
       await updateCart(productId, 1);
-      receiveNewData();
+      // receiveNewData();
     } catch (error) {}
   };
 

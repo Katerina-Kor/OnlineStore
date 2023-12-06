@@ -68,7 +68,7 @@ export const getUsersRoutes = (router: Router) =>
         if (user && (await bcrypt.compare(password, user.password))) {
           const { id, email, role } = user;
           const token = jwt.sign({ id, email, role }, process.env.TOKEN_KEY!, {
-            expiresIn: "2h",
+            expiresIn: "2min",
           });
           logger.info(`User ${email} successfully logged in`);
           return res

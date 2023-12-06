@@ -26,3 +26,8 @@ export type CartData = {
   };
   total: number;
 };
+
+export type CustomError = {
+  data: ErrorResponce,
+  status: number
+}

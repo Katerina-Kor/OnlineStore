@@ -1,5 +1,4 @@
-import { FC, useContext, useState } from 'react';
-import loginUser from '../../../api/loginRequest';
+import { FC, useEffect, useState } from 'react';
 import registerUser from '../../../api/registerRequest';
 import { useNavigate } from 'react-router-dom';
 import { SubmitHandler, useForm } from 'react-hook-form';
@@ -16,8 +15,10 @@ import {
   emailValidationRules,
   passwordValidationRules,
 } from '../../../utils/authFormValidation/authFormValidate';
-import { ChangeAuthContext } from '../../context/AuthContext';
-// import ValidationError from '../../../utils/customError/ValidationError';
+import { setUserLoggedIn } from '../../../store/reducers/authSlice';
+import { useDispatch } from 'react-redux';
+import { Link as RouterLink } from 'react-router-dom';
+import { useLoginMutation, useRegisterMutation } from '../../../store/services/authService';
 
 type PasswordType = 'password' | 'text';
 
@@ -44,7 +45,17 @@ const AuthentificationForm: FC<AuthentificationFormProps> = ({ formType }) => {
 
   const [passwordType, setPasswordType] = useState<PasswordType>('password');
   const navigate = useNavigate();
-  const changeLoginStatus = useContext(ChangeAuthContext);
+  const [login, loginResult] = useLoginMutation();
+  const [signUp] = useRegisterMutation();
+  const dispatch = useDispatch();
+ 
+  useEffect(() => {
+    if (loginResult.isSuccess) {
+      reset();
+      dispatch(setUserLoggedIn(loginResult.data.data.token));
+      navigate('/products');
+    }
+  }, [loginResult])
 
   const isRegisterPage = formType === 'register';
   const buttonName = formType === 'login' ? 'Login' : 'Sign Up';
@@ -62,16 +73,15 @@ const AuthentificationForm: FC<AuthentificationFormProps> = ({ formType }) => {
     }
   };
 
+  // useEffect()
+
   const onSubmit: SubmitHandler<AuthFormData> = async (data) => {
     if (isSubmitting) return;
     try {
       if (isRegisterPage) {
-        await registerUser(data.emailRequired, data.passwordRequired);
+        await signUp({email: data.emailRequired, password: data.passwordRequired});
       }
-      await loginUser(data.emailRequired, data.passwordRequired);
-      reset();
-      changeLoginStatus(true);
-      navigate('/products');
+      await login({email: data.emailRequired, password: data.passwordRequired});
     } catch (e) {
       // TODO: обработать конкретные ответы сервера
       const errorMessage = (e as Error).message;
@@ -135,7 +145,7 @@ const AuthentificationForm: FC<AuthentificationFormProps> = ({ formType }) => {
           <Button type="submit" variant="contained" color="primary">
             {buttonName}
           </Button>
-          <Link href={linkPath} variant="body2" alignSelf="end">
+          <Link component={RouterLink} to={linkPath} variant="body2" alignSelf="end">
             {linkText}
           </Link>
         </Stack>

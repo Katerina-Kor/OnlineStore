@@ -19,6 +19,10 @@ class TokenStorage {
     localStorage.removeItem(this.lsKey);
     this.token = null;
   }
+
+  public hasToken(): boolean {
+    return !!this.token;
+  }
 }
 
 const tokenStorageInstance = new TokenStorage();
