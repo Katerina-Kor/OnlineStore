@@ -15,10 +15,11 @@ type SuccessCartDeletionResponce = {
 
 const cartUrl = `${BASE_URL}/profile/cart`;
 
-const getCart = async () => {
+const getCart = async (signal?: AbortSignal) => {
   try {
     const responce = await fetch(cartUrl, {
       headers: { Authorization: `Bearer ${tokenStorageInstance.getToken()}` },
+      signal,
     });
 
     const data: SuccessCartResponce | ErrorResponce = await responce.json();

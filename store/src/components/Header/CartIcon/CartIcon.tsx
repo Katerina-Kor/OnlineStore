@@ -6,6 +6,8 @@ import { useNavigate } from "react-router-dom";
 
 const CartIcon: FC = () => {
   const navigate = useNavigate();
+  
+
   const handleIconClick = () => {
     navigate('/cart');
   }

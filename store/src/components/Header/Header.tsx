@@ -8,6 +8,7 @@ import UserMenu from './UserMenu/UserMenu';
 import { AuthContext } from '../context/AuthContext';
 import NavLinksList from './NavLinksList/NavLinksList';
 import CartIcon from './CartIcon/CartIcon';
+import { CartContext } from '../context/CartContext';
 
 const navLinksForUnloggedUser = [
   {
@@ -23,6 +24,8 @@ const navLinksForLoggedUser = navLinksForUnloggedUser.concat({
 
 const Header: FC = () => {
   const isLogged = useContext(AuthContext);
+  const {cartItems, totalItems, isError, error, isLoading} = useContext(CartContext);
+  console.log(cartItems, totalItems, isLoading, isError, error)
 
   return (
     <>
@@ -39,6 +42,7 @@ const Header: FC = () => {
           <NavLinksList navLinks={isLogged ? navLinksForLoggedUser : navLinksForUnloggedUser} />
           <UserMenu />
           {isLogged && <CartIcon />}
+          <p>{totalItems}</p>
         </Toolbar>
       </AppBar>
     </>

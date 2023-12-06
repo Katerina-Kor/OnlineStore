@@ -1,11 +1,12 @@
 import { FC, useContext, useEffect, useState } from 'react';
 import { getProductsList } from '../../../api/productsRequest';
 import { ProductData } from '../../../types/apiTypes';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, Link as RouterLink } from 'react-router-dom';
 import { updateCart } from '../../../api/cartRequests';
 import { Button, Link, Stack, Typography } from '@mui/material';
 import { AuthContext, ChangeAuthContext } from '../../context/AuthContext';
 import ValidationError from '../../../utils/customError/ValidationError';
+import { CartContext, ReceiveNewCartDataContext } from '../../context/CartContext';
 
 const ProductsListPage: FC = () => {
   const [products, setProducts] = useState<ProductData[] | null>(null);
@@ -13,8 +14,12 @@ const ProductsListPage: FC = () => {
   const navigate = useNavigate();
   const isLogged = useContext(AuthContext);
   const changeLoginStatus = useContext(ChangeAuthContext);
+  const {cartItems, totalItems, isError} = useContext(CartContext);
+  const receiveNewData = useContext(ReceiveNewCartDataContext)
+  console.log(cartItems, totalItems, isError)
 
   useEffect(() => {
+    if (!isLogged) return;
     const fetchData = async () => {
       try {
         const responce = await getProductsList();
@@ -40,13 +45,14 @@ const ProductsListPage: FC = () => {
   const addToCart = async (productId: string) => {
     try {
       await updateCart(productId, 1);
+      receiveNewData();
     } catch (error) {}
   };
 
   if (!isLogged) {
     return (
       <Stack spacing={2} justifyContent={'center'}>
-        <Link href="/login" variant="h5">
+        <Link component={RouterLink} to="/login" variant="h5">
           Please, login to continue
         </Link>
       </Stack>

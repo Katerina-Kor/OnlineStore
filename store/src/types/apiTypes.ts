@@ -14,7 +14,7 @@ export type ProductData = {
   price: number;
 };
 
-type ProductsInfoInCart = {
+export type ProductsInfoInCart = {
   product: ProductData;
   count: number;
 };
