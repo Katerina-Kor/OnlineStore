@@ -3,16 +3,15 @@ import {
   Typography,
   Toolbar,
 } from '@mui/material';
-import { FC, useContext, useEffect } from 'react';
+import { FC, useEffect } from 'react';
 import UserMenu from './UserMenu/UserMenu';
-import { AuthContext, ChangeAuthContext } from '../context/AuthContext';
 import NavLinksList from './NavLinksList/NavLinksList';
 import CartIcon from './CartIcon/CartIcon';
-import { CartContext } from '../context/CartContext';
-import { useGetCartDataQuery } from '../../store/services/cartDataService';
+import { useGetCartQuery } from '../../store/services/cartService';
 import { useDispatch, useSelector } from 'react-redux';
 import { RootState } from '../../store/store';
 import { setUserLoggedOut } from '../../store/reducers/authSlice';
+import { getTotalItems } from '../../utils/cartHelpers/cartHelpers';
 
 const navLinksForUnloggedUser = [
   {
@@ -27,17 +26,17 @@ const navLinksForLoggedUser = navLinksForUnloggedUser.concat({
 });
 
 const Header: FC = () => {
-  // const isLogged = useContext(AuthContext);
-  const isLogged = useSelector((state: RootState) => state.auth.isLoggedIn)
+  const isLoggedIn = useSelector((state: RootState) => state.auth.isLoggedIn)
   const dispatch = useDispatch();
-  // const changeAuthContext = useContext(ChangeAuthContext);
-  const { data, error, isLoading } = useGetCartDataQuery(null, {
-    skip: !isLogged
+  const { data, error, isLoading } = useGetCartQuery(undefined, {
+    skip: !isLoggedIn
   });
+  console.log('header', isLoggedIn);
 
   useEffect(() => {
     if (error && 'status' in error && error.status === 401) {
       dispatch(setUserLoggedOut())
+      console.log('header clear')
     }
   }, [error])
 
@@ -54,9 +53,9 @@ const Header: FC = () => {
           <Typography variant="h6" color="inherit" noWrap>
             Online Shop
           </Typography>
-          <NavLinksList navLinks={isLogged ? navLinksForLoggedUser : navLinksForUnloggedUser} />
+          <NavLinksList navLinks={isLoggedIn ? navLinksForLoggedUser : navLinksForUnloggedUser} />
           <UserMenu />
-          {isLogged && <CartIcon />}
+          {data && <CartIcon productsNumber={getTotalItems(data.data.cart.items)} />}
         </Toolbar>
       </AppBar>) : (
         null

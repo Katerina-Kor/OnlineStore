@@ -31,14 +31,14 @@ export const authApi = createApi({
     },
   }) as BaseQueryFn<string | FetchArgs, unknown, CustomError, {}>,
   endpoints: (build) => ({
-    login: build.mutation<SuccessLoginResponce, AuthArgs>({
+    loginUser: build.mutation<SuccessLoginResponce, AuthArgs>({
       query: (args) => ({
         url: '/login',
         method: 'POST',
         body: JSON.stringify(args),
       }),
     }),
-    register: build.mutation<SuccessRegisterResponce, AuthArgs>({
+    registerUser: build.mutation<SuccessRegisterResponce, AuthArgs>({
       query: (args) => ({
         url: '/register',
         method: 'POST',
@@ -48,4 +48,4 @@ export const authApi = createApi({
   }),
 });
 
-export const { useLoginMutation, useRegisterMutation } = authApi;
+export const { useLoginUserMutation, useRegisterUserMutation } = authApi;

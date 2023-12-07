@@ -13,6 +13,7 @@ class TokenStorage {
   public setToken(newToken: string): void {
     localStorage.setItem(this.lsKey, newToken);
     this.token = newToken;
+    console.log('ping2', this.token, localStorage.getItem(this.lsKey))
   }
 
   public clearToken(): void {

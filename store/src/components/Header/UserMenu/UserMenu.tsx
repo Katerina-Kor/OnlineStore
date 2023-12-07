@@ -7,19 +7,15 @@ import {
   Tooltip,
   Typography,
 } from '@mui/material';
-import { FC, useContext, useState, MouseEvent } from 'react';
-import { AuthContext, ChangeAuthContext } from '../../context/AuthContext';
+import { FC, useState, MouseEvent } from 'react';
 import { useNavigate } from 'react-router-dom';
-import tokenStorageInstance from '../../../utils/tokenStorage/tokenStorage';
 import { useDispatch, useSelector } from 'react-redux';
 import { RootState } from '../../../store/store';
 import { setUserLoggedOut } from '../../../store/reducers/authSlice';
 
 const UserMenu: FC = () => {
   const [anchorElUser, setAnchorElUser] = useState<null | HTMLElement>(null);
-  // const isLogged = useContext(AuthContext);
-  // const changeLoginStatus = useContext(ChangeAuthContext);
-  const isLogged = useSelector((state: RootState) => state.auth.isLoggedIn);
+  const isLoggedIn = useSelector((state: RootState) => state.auth.isLoggedIn);
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
@@ -38,7 +34,6 @@ const UserMenu: FC = () => {
 
   const handleClickLogout = () => {
     handleCloseUserMenu();
-    tokenStorageInstance.clearToken();
     dispatch(setUserLoggedOut());
   };
 
@@ -53,7 +48,7 @@ const UserMenu: FC = () => {
         <IconButton onClick={handleOpenUserMenu} sx={{ p: 0 }}>
           <AccountCircle
             fontSize="large"
-            color={`${isLogged ? 'primary' : 'disabled'}`}
+            color={`${isLoggedIn ? 'primary' : 'disabled'}`}
           />
         </IconButton>
       </Tooltip>
@@ -73,7 +68,7 @@ const UserMenu: FC = () => {
         open={Boolean(anchorElUser)}
         onClose={handleCloseUserMenu}
       >
-        {isLogged ? (
+        {isLoggedIn ? (
           <MenuItem key="logout" onClick={handleClickLogout}>
             <Typography textAlign="center">Logout</Typography>
           </MenuItem>

@@ -1,5 +1,4 @@
 import { FC, useEffect, useState } from 'react';
-import registerUser from '../../../api/registerRequest';
 import { useNavigate } from 'react-router-dom';
 import { SubmitHandler, useForm } from 'react-hook-form';
 import {
@@ -18,7 +17,7 @@ import {
 import { setUserLoggedIn } from '../../../store/reducers/authSlice';
 import { useDispatch } from 'react-redux';
 import { Link as RouterLink } from 'react-router-dom';
-import { useLoginMutation, useRegisterMutation } from '../../../store/services/authService';
+import { useLoginUserMutation, useRegisterUserMutation } from '../../../store/services/cartService';
 
 type PasswordType = 'password' | 'text';
 
@@ -45,17 +44,18 @@ const AuthentificationForm: FC<AuthentificationFormProps> = ({ formType }) => {
 
   const [passwordType, setPasswordType] = useState<PasswordType>('password');
   const navigate = useNavigate();
-  const [login, loginResult] = useLoginMutation();
-  const [signUp] = useRegisterMutation();
+  const [login, loginResult] = useLoginUserMutation();
+  const [signUp] = useRegisterUserMutation();
   const dispatch = useDispatch();
  
   useEffect(() => {
     if (loginResult.isSuccess) {
       reset();
+      console.log('token', loginResult.data.data.token)
       dispatch(setUserLoggedIn(loginResult.data.data.token));
       navigate('/products');
     }
-  }, [loginResult])
+  }, [loginResult.data])
 
   const isRegisterPage = formType === 'register';
   const buttonName = formType === 'login' ? 'Login' : 'Sign Up';
@@ -72,8 +72,6 @@ const AuthentificationForm: FC<AuthentificationFormProps> = ({ formType }) => {
       setPasswordType('password');
     }
   };
-
-  // useEffect()
 
   const onSubmit: SubmitHandler<AuthFormData> = async (data) => {
     if (isSubmitting) return;

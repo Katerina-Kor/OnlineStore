@@ -1,55 +1,63 @@
-import { FC, useContext, useEffect, useState } from 'react';
-import { getProductsList } from '../../../api/productsRequest';
-import { ProductData } from '../../../types/apiTypes';
+import { FC, useEffect } from 'react';
 import { useNavigate, Link as RouterLink } from 'react-router-dom';
-import { updateCart } from '../../../api/cartRequests';
-import { Button, Link, Stack, Typography } from '@mui/material';
-import { AuthContext, ChangeAuthContext } from '../../context/AuthContext';
-import ValidationError from '../../../utils/customError/ValidationError';
-import { CartContext, ReceiveNewCartDataContext } from '../../context/CartContext';
+import { Button, Grid, Link, Stack, Typography } from '@mui/material';
+import { useDispatch, useSelector } from 'react-redux';
+import { RootState } from '../../../store/store';
+import { useUpdateCartMutation, useGetProductsListQuery, useGetCartQuery } from '../../../store/services/cartService';
+import { setUserLoggedOut } from '../../../store/reducers/authSlice';
+import { getProductNumberInCart } from '../../../utils/cartHelpers/cartHelpers';
+import ProductCard from '../../ProductCard/ProductCard';
 
 const ProductsListPage: FC = () => {
-  const [products, setProducts] = useState<ProductData[] | null>(null);
-  const [error, setError] = useState<string | null>(null);
-  const navigate = useNavigate();
-  const isLogged = useContext(AuthContext);
-  const changeLoginStatus = useContext(ChangeAuthContext);
-  // const {cartItems, totalItems, isError} = useContext(CartContext);
-  // const receiveNewData = useContext(ReceiveNewCartDataContext)
-  // console.log(cartItems, totalItems, isError)
+  
+  const isLoggedIn = useSelector((state: RootState) => state.auth.isLoggedIn);
+  const { data: productsData, error, isError, isLoading} = useGetProductsListQuery(undefined, {
+    skip: !isLoggedIn,
+  })
+  const { data: cartData } = useGetCartQuery(undefined, {
+    skip: !isLoggedIn,
+  })
+  
+  const dispatch = useDispatch();
 
   useEffect(() => {
-    if (!isLogged) return;
-    const fetchData = async () => {
-      try {
-        const responce = await getProductsList();
-        setProducts(responce);
-      } catch (e) {
-        if (e instanceof ValidationError) {
-          if (e.statusCode === 401) {
-            changeLoginStatus(false);
-          } else {
-            setError(e.message);
-          }
-        } else if (e instanceof Error) {
-          setError(e.message);
-        } else {
-          throw error;
-        }
-      }
-    };
+    if (error && 'status' in error && error.status === 401) {
+      dispatch(setUserLoggedOut())
+      console.log('products page clear')
+    }
+  }, [error])
 
-    fetchData();
-  }, []);
+  // useEffect(() => {
+  //   if (!isLogged) return;
+  //   const fetchData = async () => {
+  //     try {
+  //       const responce = await getProductsList();
+  //       setProducts(responce);
+  //     } catch (e) {
+  //       if (e instanceof ValidationError) {
+  //         if (e.statusCode === 401) {
+  //           changeLoginStatus(false);
+  //         } else {
+  //           setError(e.message);
+  //         }
+  //       } else if (e instanceof Error) {
+  //         setError(e.message);
+  //       } else {
+  //         throw error;
+  //       }
+  //     }
+  //   };
 
-  const addToCart = async (productId: string) => {
-    try {
-      await updateCart(productId, 1);
-      // receiveNewData();
-    } catch (error) {}
-  };
+  //   fetchData();
+  // }, []);
 
-  if (!isLogged) {
+  // const addToCart = async (productId: string) => {
+  //   try {
+  //     await updateCart({productId, count: 1});
+  //   } catch (e) {}
+  // };
+
+  if (!isLoggedIn) {
     return (
       <Stack spacing={2} justifyContent={'center'}>
         <Link component={RouterLink} to="/login" variant="h5">
@@ -60,7 +68,7 @@ const ProductsListPage: FC = () => {
   }
 
   if (error) {
-    return <p>{error}</p>;
+    return <p>{`${error}`}</p>;
   }
 
   return (
@@ -73,41 +81,19 @@ const ProductsListPage: FC = () => {
       >
         Products list
       </Typography>
-      {products ? (
-        products.map((product) => (
-          <Stack
-            padding={1}
-            spacing={1}
-            justifyContent={'center'}
-            alignItems={'center'}
-            sx={{ border: '1px solid gray', borderRadius: '5px' }}
-            key={product.id}
-            onClick={(event) => {
-              if (event.target instanceof HTMLButtonElement) return;
-              navigate(`/products/${product.id}`);
-            }}
-          >
-            <Typography variant="body1" textAlign={'center'}>
-              {product.title}
-            </Typography>
-            <Typography variant="body1" textAlign={'center'}>
-              {product.price}
-            </Typography>
-            <Button
-              onClick={() => addToCart(product.id)}
-              variant="outlined"
-              type="button"
-              sx={{ width: 'fit-content' }}
-            >
-              Add to card
-            </Button>
-          </Stack>
-        ))
-      ) : (
-        <p>Loading...</p>
-      )}
+      <Stack direction={'row'} gap={2} flexWrap={'wrap'} justifyContent={'center'} padding={3}>
+        {productsData && cartData ? (
+          productsData.data.map((product) => (
+            <ProductCard productInfo={product} cartItems={cartData.data.cart.items} key={product.id} />
+          ))
+        ) : (
+          <p>Loading...</p>
+        )}
+      </Stack>
     </Stack>
   );
 };
+
+
 
 export default ProductsListPage;

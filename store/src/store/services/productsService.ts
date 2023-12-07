@@ -1,36 +1,40 @@
 import { BaseQueryFn, FetchArgs, createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react';
 import { BASE_URL } from '../../constants/apiConstants';
 import tokenStorageInstance from '../../utils/tokenStorage/tokenStorage';
-import { CartData, CustomError } from '../../types/apiTypes';
+import { CustomError, ProductData } from '../../types/apiTypes';
 
-type SuccessLoginResponce = {
-  data: { token: string };
+type SuccessProductsListResponce = {
+  data: ProductData[];
   error: null;
 };
 
-type LoginArgs = {
-  email: string;
-  password: string;
-}
+type SuccessProductResponce = {
+  data: ProductData;
+  error: null;
+};
 
-export const cartDataApi = createApi({
-  reducerPath: 'cartDataApi',
+export const productsApi = createApi({
+  reducerPath: 'productsApi',
   baseQuery: fetchBaseQuery({
     baseUrl: BASE_URL,
     prepareHeaders: (headers) => {
       const token = tokenStorageInstance.getToken();
       headers.set('Authorization', `Bearer ${token}`);
-      headers.set('Content-Type', `application/json`);
       return headers;
     },
   }) as BaseQueryFn<string | FetchArgs, unknown, CustomError, {}>,
   endpoints: (build) => ({
-    getCartData: build.query<CartData, null | void>({
+    getProductsList: build.query<SuccessProductsListResponce, void>({
       query: () => ({
-        url: '/profile/cart',
+        url: '/products',
+      }),
+    }),
+    getProduct: build.query<SuccessProductResponce, string>({
+      query: (productId) => ({
+        url: `/products/${productId}`,
       }),
     }),
   }),
 });
 
-export const { useGetCartDataQuery } = cartDataApi;
+export const { useGetProductsListQuery, useGetProductQuery } = productsApi;
