@@ -1,29 +1,22 @@
 import { FC, useEffect } from 'react';
-import { useNavigate, Link as RouterLink } from 'react-router-dom';
-import { Button, Grid, Link, Stack, Typography } from '@mui/material';
+import { Link as RouterLink } from 'react-router-dom';
+import {Link, Stack, Typography } from '@mui/material';
 import { useDispatch, useSelector } from 'react-redux';
 import { RootState } from '../../../store/store';
-import { useUpdateCartMutation, useGetProductsListQuery, useGetCartQuery } from '../../../store/services/cartService';
+import { useGetProductsListQuery } from '../../../store/services/cartService';
 import { setUserLoggedOut } from '../../../store/reducers/authSlice';
-import { getProductNumberInCart } from '../../../utils/cartHelpers/cartHelpers';
 import ProductCard from '../../ProductCard/ProductCard';
 
 const ProductsListPage: FC = () => {
-  
   const isLoggedIn = useSelector((state: RootState) => state.auth.isLoggedIn);
-  const { data: productsData, error, isError, isLoading} = useGetProductsListQuery(undefined, {
+  const { data: productsData, error, isFetching} = useGetProductsListQuery(undefined, {
     skip: !isLoggedIn,
   })
-  const { data: cartData } = useGetCartQuery(undefined, {
-    skip: !isLoggedIn,
-  })
-  
   const dispatch = useDispatch();
 
   useEffect(() => {
     if (error && 'status' in error && error.status === 401) {
       dispatch(setUserLoggedOut())
-      console.log('products page clear')
     }
   }, [error])
 
@@ -51,12 +44,6 @@ const ProductsListPage: FC = () => {
   //   fetchData();
   // }, []);
 
-  // const addToCart = async (productId: string) => {
-  //   try {
-  //     await updateCart({productId, count: 1});
-  //   } catch (e) {}
-  // };
-
   if (!isLoggedIn) {
     return (
       <Stack spacing={2} justifyContent={'center'}>
@@ -79,15 +66,16 @@ const ProductsListPage: FC = () => {
         padding="20px"
         textAlign={'center'}
       >
-        Products list
+        Products
       </Typography>
       <Stack direction={'row'} gap={2} flexWrap={'wrap'} justifyContent={'center'} padding={3}>
-        {productsData && cartData ? (
+        {productsData && (
           productsData.data.map((product) => (
-            <ProductCard productInfo={product} cartItems={cartData.data.cart.items} key={product.id} />
+            <ProductCard productInfo={product} key={product.id} />
           ))
-        ) : (
-          <p>Loading...</p>
+        )}
+        {isFetching && (
+          <p>Loading ...</p>
         )}
       </Stack>
     </Stack>

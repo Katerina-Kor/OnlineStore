@@ -1,21 +1,20 @@
-import { FC, useEffect, useState } from 'react';
-import { getCart } from '../../../api/cartRequests';
-import { CartData } from '../../../types/apiTypes';
-import ValidationError from '../../../utils/customError/ValidationError';
-import { Link, Stack, Typography } from '@mui/material';
+import { FC } from 'react';
+import { Link, List, ListItem, ListItemText, Stack, Typography } from '@mui/material';
 import { Link as RouterLink } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import { RootState } from '../../../store/store';
-import { setUserLoggedOut } from '../../../store/reducers/authSlice';
 import { useGetCartQuery, useUpdateCartMutation } from '../../../store/services/cartService';
+import ProductCard from '../../ProductCard/ProductCard';
+import CartItem from '../../CartItem/CartItem';
 
 const CartPage: FC = () => {
   const isLoggedIn = useSelector((state: RootState) => state.auth.isLoggedIn);
   const dispatch = useDispatch();
-  const { data: cartData } = useGetCartQuery(undefined, {
+  const { data: cartData, isError } = useGetCartQuery(undefined, {
     skip: !isLoggedIn,
   })
   const [ updateCart, updateCartResult ] = useUpdateCartMutation();
+  // const cartIsEmpty = cartData?.data.cart.items.find((item) => item.count > 0);
 
   if (!isLoggedIn) {
     return (
@@ -27,9 +26,9 @@ const CartPage: FC = () => {
     );
   }
 
-  // if (error) {
-  //   return <p>{error}</p>;
-  // }
+  if (isError) {
+    return <p>error</p>;
+  }
 
   return (
     <Stack spacing={2} justifyContent={'center'}>
@@ -42,20 +41,19 @@ const CartPage: FC = () => {
         Cart
       </Typography>
       <Stack direction={'column'} gap={2} flexWrap={'wrap'} justifyContent={'center'} padding={3}>
-        {cartData ? (
-          <>
-            {cartData.data.cart.items.map((item) => (
-              <div key={item.product.id}>
-                <p>{item.product.title}</p>
-                <p>{`Count: ${item.count}`}</p>
-                <p>{`Price: ${item.product.price * item.count}`}</p>
-              </div>
-            ))}
-            <p>{`Total: ${cartData.data.total}`}</p>
-          </>
-        ) : (
-          <p>Loading...</p>
+        {cartData && (
+          cartData.data.cart.items.map((cartItem) => (
+            cartItem.count
+            ? <CartItem cartItem={cartItem} key={cartItem.product.id} />
+            : null
+          ))
         )}
+        <ListItem sx={{ padding: (theme) => theme.spacing(1, 0) }}>
+          <ListItemText primary="Total" />
+          <Typography variant="subtitle1" sx={{ fontWeight: "bold" }}>
+            {cartData?.data.total || 0}
+          </Typography>
+        </ListItem>
       </Stack>
     </Stack>
   );

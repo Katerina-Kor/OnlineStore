@@ -1,9 +1,10 @@
 import { Stack, Typography } from '@mui/material';
-import { FC, useContext } from 'react';
-import { AuthContext } from '../../context/AuthContext';
+import { FC } from 'react';
+import { useSelector } from 'react-redux';
+import { RootState } from '../../../store/store';
 
 const MainPage: FC = () => {
-  const isLogged = useContext(AuthContext);
+  const isLoggedIn = useSelector((state: RootState) => state.auth.isLoggedIn);
   return (
     <Stack spacing={1} justifyContent={'center'}>
       <Typography
@@ -17,7 +18,7 @@ const MainPage: FC = () => {
       <Typography component="h4" variant="h5" textAlign={'center'}>
         Welcome to our online shop!
       </Typography>
-      {!isLogged && (
+      {!isLoggedIn && (
         <Typography component="h4" variant="h5" textAlign={'center'}>
           Please, login to see products
         </Typography>
