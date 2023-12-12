@@ -17,7 +17,7 @@ const CartItem: FC<CartItemProps> = ({ cartItem }) => {
       direction="row"
       justifyContent={'start'}
       alignItems={'center'}
-      sx={{ border: '1px solid gray', borderRadius: '5px' }}
+      sx={{ borderBottom: '1px solid gray', borderRadius: '5px' }}
     >
       <ImageListItem component={'div'} sx={{ width: '100px', height: '100px' }}>
         <img src={noImage} alt="product image" loading="lazy" />

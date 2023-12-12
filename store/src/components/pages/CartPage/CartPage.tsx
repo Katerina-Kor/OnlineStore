@@ -1,5 +1,6 @@
 import { FC } from 'react';
 import {
+  Button,
   Link,
   List,
   ListItem,
@@ -61,13 +62,18 @@ const CartPage: FC = () => {
             cartItem.count ? (
               <CartItem cartItem={cartItem} key={cartItem.product.id} />
             ) : null
-          )}
-        <ListItem sx={{ padding: (theme) => theme.spacing(1, 0) }}>
-          <ListItemText primary="Total" />
-          <Typography variant="subtitle1" sx={{ fontWeight: 'bold' }}>
-            {cartData?.data.total || 0}
-          </Typography>
-        </ListItem>
+        )}
+        <Stack gap={1}>
+          <Stack direction='row' justifyContent='space-between' padding={2}>
+            <Typography variant="h6" sx={{ fontWeight: 'bold' }}>Total:</Typography>
+            <Typography variant="h6" sx={{ fontWeight: 'bold' }}>
+              {`$${cartData?.data.total || 0}`}
+            </Typography>
+          </Stack>
+          <Button size='large' variant='contained'>
+            Order
+          </Button>
+        </Stack>
       </Stack>
     </Stack>
   );
