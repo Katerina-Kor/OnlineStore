@@ -8,7 +8,7 @@ import {
   Stack,
   Typography,
 } from '@mui/material';
-import { Link as RouterLink } from 'react-router-dom';
+import { Link as RouterLink, useNavigate } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import { RootState } from '../../../store/store';
 import {
@@ -16,6 +16,7 @@ import {
   useUpdateCartMutation,
 } from '../../../store/services/cartService';
 import CartItem from '../../CartItem/CartItem';
+import { isCartEmpty } from '../../../utils/cartHelpers/cartHelpers';
 
 const CartPage: FC = () => {
   const isLoggedIn = useSelector((state: RootState) => state.auth.isLoggedIn);
@@ -24,7 +25,7 @@ const CartPage: FC = () => {
     skip: !isLoggedIn,
   });
   const [updateCart, updateCartResult] = useUpdateCartMutation();
-  // const cartIsEmpty = cartData?.data.cart.items.find((item) => item.count > 0);
+  const navigate = useNavigate();
 
   if (!isLoggedIn) {
     return (
@@ -58,22 +59,44 @@ const CartPage: FC = () => {
         padding={3}
       >
         {cartData &&
-          cartData.data.cart.items.map((cartItem) =>
-            cartItem.count ? (
-              <CartItem cartItem={cartItem} key={cartItem.product.id} />
-            ) : null
-        )}
-        <Stack gap={1}>
-          <Stack direction='row' justifyContent='space-between' padding={2}>
-            <Typography variant="h6" sx={{ fontWeight: 'bold' }}>Total:</Typography>
-            <Typography variant="h6" sx={{ fontWeight: 'bold' }}>
-              {`$${cartData?.data.total || 0}`}
-            </Typography>
-          </Stack>
-          <Button size='large' variant='contained'>
-            Order
-          </Button>
-        </Stack>
+          (isCartEmpty(cartData.data.cart.items) ? (
+            <Stack gap={1}>
+              <Typography variant="h6" textAlign={'center'}>
+                Cart is empty
+              </Typography>
+              <Typography variant='body1' textAlign='center'>
+                Visit catalog to select products
+              </Typography>
+              <Button role='link' size="large" variant="contained" onClick={() => navigate('/products')}>
+                go shopping
+              </Button>
+            </Stack>
+          ) : (
+            <>
+              {cartData.data.cart.items.map((cartItem) =>
+                cartItem.count ? (
+                  <CartItem cartItem={cartItem} key={cartItem.product.id} />
+                ) : null
+              )}
+              <Stack gap={1}>
+                <Stack
+                  direction="row"
+                  justifyContent="space-between"
+                  padding={2}
+                >
+                  <Typography variant="h6" sx={{ fontWeight: 'bold' }}>
+                    Total:
+                  </Typography>
+                  <Typography variant="h6" sx={{ fontWeight: 'bold' }}>
+                    {`$${cartData.data.total}`}
+                  </Typography>
+                </Stack>
+                <Button size="large" variant="contained">
+                  Order
+                </Button>
+              </Stack>
+            </>
+          ))}
       </Stack>
     </Stack>
   );

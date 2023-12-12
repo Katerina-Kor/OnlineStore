@@ -13,3 +13,8 @@ export const getProductNumberInCart = (
   );
   return product?.count || 0;
 };
+
+export const isCartEmpty = (cartItems: ProductsInfoInCart[]) => {
+  const arr = cartItems.filter((item) => item.count > 0);
+  return arr.length === 0;
+};
