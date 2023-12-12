@@ -1,10 +1,10 @@
-import { useEffect, useState } from "react";
-import { ProductsInfoInCart } from "../types/apiTypes";
-import { getCart } from "../api/cartRequests";
+import { useEffect, useState } from 'react';
+import { ProductsInfoInCart } from '../types/apiTypes';
+import { getCart } from '../api/cartRequests';
 
 const getTotalItems = (itemsArr: ProductsInfoInCart[] | null) => {
   return itemsArr ? itemsArr.reduce((acc, item) => acc + item.count, 0) : null;
-}
+};
 
 export const useCartData = () => {
   const [cartItems, setCartItems] = useState<ProductsInfoInCart[] | null>(null);
@@ -37,7 +37,7 @@ export const useCartData = () => {
 
   const receiveNewData = () => {
     fetchData();
-  }
+  };
 
   useEffect(() => {
     const controller = new AbortController();
@@ -47,9 +47,16 @@ export const useCartData = () => {
 
     return () => {
       controller.abort();
-    }
-  }, [])
+    };
+  }, []);
 
-  return { cartItems, totalPrice, totalItems, error, isError, isLoading, receiveNewData };
-
-}
+  return {
+    cartItems,
+    totalPrice,
+    totalItems,
+    error,
+    isError,
+    isLoading,
+    receiveNewData,
+  };
+};

@@ -1,8 +1,4 @@
-import {
-  AppBar,
-  Typography,
-  Toolbar,
-} from '@mui/material';
+import { AppBar, Typography, Toolbar } from '@mui/material';
 import { FC, useEffect } from 'react';
 import UserMenu from './UserMenu/UserMenu';
 import NavLinksList from './NavLinksList/NavLinksList';
@@ -26,41 +22,45 @@ const navLinksForLoggedUser = navLinksForUnloggedUser.concat({
 });
 
 const Header: FC = () => {
-  const isLoggedIn = useSelector((state: RootState) => state.auth.isLoggedIn)
+  const isLoggedIn = useSelector((state: RootState) => state.auth.isLoggedIn);
   const dispatch = useDispatch();
   const { data, error, isLoading } = useGetCartQuery(undefined, {
-    skip: !isLoggedIn
+    skip: !isLoggedIn,
   });
   console.log('header', isLoggedIn);
 
   useEffect(() => {
     if (error && 'status' in error && error.status === 401) {
-      dispatch(setUserLoggedOut())
-      console.log('header clear')
+      dispatch(setUserLoggedOut());
+      console.log('header clear');
     }
-  }, [error])
+  }, [error]);
 
   return (
     <>
-    { !isLoading ?
-      (<AppBar
-        position="static"
-        color="default"
-        elevation={2}
-        sx={{ borderBottom: (theme) => `1px solid ${theme.palette.divider}` }}
-      >
-        <Toolbar sx={{ flexWrap: 'wrap', gap: '10px' }}>
-          <Typography variant="h6" color="inherit" noWrap>
-            Online Shop
-          </Typography>
-          <NavLinksList navLinks={isLoggedIn ? navLinksForLoggedUser : navLinksForUnloggedUser} />
-          <UserMenu />
-          {data && <CartIcon productsNumber={getTotalItems(data.data.cart.items)} />}
-        </Toolbar>
-      </AppBar>) : (
-        null
-      )
-    }
+      {!isLoading ? (
+        <AppBar
+          position="static"
+          color="default"
+          elevation={2}
+          sx={{ borderBottom: (theme) => `1px solid ${theme.palette.divider}` }}
+        >
+          <Toolbar sx={{ flexWrap: 'wrap', gap: '10px' }}>
+            <Typography variant="h6" color="inherit" noWrap>
+              Online Shop
+            </Typography>
+            <NavLinksList
+              navLinks={
+                isLoggedIn ? navLinksForLoggedUser : navLinksForUnloggedUser
+              }
+            />
+            <UserMenu />
+            {data && (
+              <CartIcon productsNumber={getTotalItems(data.data.cart.items)} />
+            )}
+          </Toolbar>
+        </AppBar>
+      ) : null}
     </>
   );
 };

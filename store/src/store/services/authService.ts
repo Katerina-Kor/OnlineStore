@@ -1,4 +1,9 @@
-import { BaseQueryFn, FetchArgs, createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react';
+import {
+  BaseQueryFn,
+  FetchArgs,
+  createApi,
+  fetchBaseQuery,
+} from '@reduxjs/toolkit/query/react';
 import { BASE_URL } from '../../constants/apiConstants';
 import { CustomError } from '../../types/apiTypes';
 
@@ -19,7 +24,7 @@ type SuccessRegisterResponce = {
 type AuthArgs = {
   email: string;
   password: string;
-}
+};
 
 export const authApi = createApi({
   reducerPath: 'authApi',
@@ -42,7 +47,7 @@ export const authApi = createApi({
       query: (args) => ({
         url: '/register',
         method: 'POST',
-        body: JSON.stringify({...args, role: 'admin'}),
+        body: JSON.stringify({ ...args, role: 'admin' }),
       }),
     }),
   }),

@@ -1,7 +1,7 @@
-import { Backdrop, Button } from "@mui/material";
-import { FC, useState } from "react";
+import { Backdrop, Button } from '@mui/material';
+import { FC, useState } from 'react';
 
-const Cover: FC<{isOpen: boolean}> = (props) => {
+const Cover: FC<{ isOpen: boolean }> = (props) => {
   const [open, setOpen] = useState(props.isOpen);
   const handleClose = () => {
     setOpen(false);
@@ -22,6 +22,6 @@ const Cover: FC<{isOpen: boolean}> = (props) => {
       </Backdrop>
     </div>
   );
-}
+};
 
 export default Cover;

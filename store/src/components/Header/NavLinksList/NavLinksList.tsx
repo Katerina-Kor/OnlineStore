@@ -1,17 +1,17 @@
-import { Link, Stack } from "@mui/material";
-import { FC } from "react";
-import { Link as RouterLink } from "react-router-dom";
+import { Link, Stack } from '@mui/material';
+import { FC } from 'react';
+import { Link as RouterLink } from 'react-router-dom';
 
 type NavLinksListProps = {
   navLinks: NavLink[];
-}
+};
 
-type NavLink= {
+type NavLink = {
   name: string;
   href: string;
-}
+};
 
-const NavLinksList: FC<NavLinksListProps> = ({navLinks}) => {
+const NavLinksList: FC<NavLinksListProps> = ({ navLinks }) => {
   return (
     <Stack
       component="nav"
@@ -19,8 +19,8 @@ const NavLinksList: FC<NavLinksListProps> = ({navLinks}) => {
       justifyContent="center"
       sx={{ flexGrow: 1 }}
     >
-      {navLinks.map(navLink => 
-        <Link 
+      {navLinks.map((navLink) => (
+        <Link
           component={RouterLink}
           variant="button"
           color="text.primary"
@@ -30,9 +30,9 @@ const NavLinksList: FC<NavLinksListProps> = ({navLinks}) => {
         >
           {navLink.name}
         </Link>
-      )}
+      ))}
     </Stack>
   );
-}
+};
 
 export default NavLinksList;

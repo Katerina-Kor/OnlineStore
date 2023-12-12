@@ -1,4 +1,9 @@
-import { BaseQueryFn, FetchArgs, createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react';
+import {
+  BaseQueryFn,
+  FetchArgs,
+  createApi,
+  fetchBaseQuery,
+} from '@reduxjs/toolkit/query/react';
 import { BASE_URL } from '../../constants/apiConstants';
 import tokenStorageInstance from '../../utils/tokenStorage/tokenStorage';
 import { CartData, CustomError, ProductData } from '../../types/apiTypes';
@@ -46,7 +51,7 @@ type SuccessRegisterResponce = {
 type AuthArgs = {
   email: string;
   password: string;
-}
+};
 
 export const cartApi = createApi({
   reducerPath: 'cartApi',
@@ -68,21 +73,21 @@ export const cartApi = createApi({
       providesTags: ['UpdateCart'],
     }),
     updateCart: build.mutation<SuccessCartResponce, UpdateCartArgs>({
-      query: ({productId, count}) => ({
+      query: ({ productId, count }) => ({
         url: '/profile/cart',
         method: 'PUT',
-        body: JSON.stringify({productId, count}),
+        body: JSON.stringify({ productId, count }),
       }),
       invalidatesTags: (result, error, args) => {
         return args.needValidate ? ['UpdateCart'] : [];
-      }
+      },
     }),
     deleteCart: build.mutation<SuccessCartDeletionResponce, void>({
       query: () => ({
         url: '/profile/cart',
         method: 'DELETE',
       }),
-      invalidatesTags: ['UpdateCart']
+      invalidatesTags: ['UpdateCart'],
     }),
     loginUser: build.mutation<SuccessLoginResponce, AuthArgs>({
       query: (args) => ({
@@ -90,20 +95,20 @@ export const cartApi = createApi({
         method: 'POST',
         body: JSON.stringify(args),
       }),
-      invalidatesTags: ['UpdateCart', 'UpdateProducts']
+      invalidatesTags: ['UpdateCart', 'UpdateProducts'],
     }),
     registerUser: build.mutation<SuccessRegisterResponce, AuthArgs>({
       query: (args) => ({
         url: '/register',
         method: 'POST',
-        body: JSON.stringify({...args, role: 'admin'}),
+        body: JSON.stringify({ ...args, role: 'admin' }),
       }),
     }),
     getProductsList: build.query<SuccessProductsListResponce, void>({
       query: () => ({
         url: '/products',
       }),
-      providesTags: ['UpdateProducts']
+      providesTags: ['UpdateProducts'],
     }),
     getProduct: build.query<SuccessProductResponce, string>({
       query: (productId) => ({
@@ -113,4 +118,12 @@ export const cartApi = createApi({
   }),
 });
 
-export const { useGetCartQuery, useUpdateCartMutation, useDeleteCartMutation, useGetProductQuery, useGetProductsListQuery, useLoginUserMutation, useRegisterUserMutation } = cartApi;
+export const {
+  useGetCartQuery,
+  useUpdateCartMutation,
+  useDeleteCartMutation,
+  useGetProductQuery,
+  useGetProductsListQuery,
+  useLoginUserMutation,
+  useRegisterUserMutation,
+} = cartApi;

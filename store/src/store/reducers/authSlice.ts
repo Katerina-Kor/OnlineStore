@@ -6,7 +6,7 @@ type AuthState = {
 };
 
 const initialState: AuthState = {
-  isLoggedIn: tokenStorageInstance.hasToken()
+  isLoggedIn: tokenStorageInstance.hasToken(),
 };
 
 export const authSlice = createSlice({
@@ -16,13 +16,13 @@ export const authSlice = createSlice({
     setUserLoggedIn: (state, action: PayloadAction<string>) => {
       tokenStorageInstance.setToken(action.payload);
       state.isLoggedIn = true;
-      console.log('ping', tokenStorageInstance.getToken())
+      console.log('ping', tokenStorageInstance.getToken());
     },
     setUserLoggedOut: (state) => {
       tokenStorageInstance.clearToken();
       state.isLoggedIn = false;
-      console.log('clear token')
-    }
+      console.log('clear token');
+    },
   },
 });
 

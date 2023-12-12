@@ -1,9 +1,19 @@
 import { FC } from 'react';
-import { Link, List, ListItem, ListItemText, Stack, Typography } from '@mui/material';
+import {
+  Link,
+  List,
+  ListItem,
+  ListItemText,
+  Stack,
+  Typography,
+} from '@mui/material';
 import { Link as RouterLink } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import { RootState } from '../../../store/store';
-import { useGetCartQuery, useUpdateCartMutation } from '../../../store/services/cartService';
+import {
+  useGetCartQuery,
+  useUpdateCartMutation,
+} from '../../../store/services/cartService';
 import CartItem from '../../CartItem/CartItem';
 
 const CartPage: FC = () => {
@@ -11,8 +21,8 @@ const CartPage: FC = () => {
   const dispatch = useDispatch();
   const { data: cartData, isError } = useGetCartQuery(undefined, {
     skip: !isLoggedIn,
-  })
-  const [ updateCart, updateCartResult ] = useUpdateCartMutation();
+  });
+  const [updateCart, updateCartResult] = useUpdateCartMutation();
   // const cartIsEmpty = cartData?.data.cart.items.find((item) => item.count > 0);
 
   if (!isLoggedIn) {
@@ -39,17 +49,22 @@ const CartPage: FC = () => {
       >
         Cart
       </Typography>
-      <Stack direction={'column'} gap={2} flexWrap={'wrap'} justifyContent={'center'} padding={3}>
-        {cartData && (
-          cartData.data.cart.items.map((cartItem) => (
-            cartItem.count
-            ? <CartItem cartItem={cartItem} key={cartItem.product.id} />
-            : null
-          ))
-        )}
+      <Stack
+        direction={'column'}
+        gap={2}
+        flexWrap={'wrap'}
+        justifyContent={'center'}
+        padding={3}
+      >
+        {cartData &&
+          cartData.data.cart.items.map((cartItem) =>
+            cartItem.count ? (
+              <CartItem cartItem={cartItem} key={cartItem.product.id} />
+            ) : null
+          )}
         <ListItem sx={{ padding: (theme) => theme.spacing(1, 0) }}>
           <ListItemText primary="Total" />
-          <Typography variant="subtitle1" sx={{ fontWeight: "bold" }}>
+          <Typography variant="subtitle1" sx={{ fontWeight: 'bold' }}>
             {cartData?.data.total || 0}
           </Typography>
         </ListItem>

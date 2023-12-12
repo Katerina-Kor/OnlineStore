@@ -17,7 +17,10 @@ import {
 import { setUserLoggedIn } from '../../../store/reducers/authSlice';
 import { useDispatch } from 'react-redux';
 import { Link as RouterLink } from 'react-router-dom';
-import { useLoginUserMutation, useRegisterUserMutation } from '../../../store/services/cartService';
+import {
+  useLoginUserMutation,
+  useRegisterUserMutation,
+} from '../../../store/services/cartService';
 
 type PasswordType = 'password' | 'text';
 
@@ -47,15 +50,15 @@ const AuthentificationForm: FC<AuthentificationFormProps> = ({ formType }) => {
   const [login, loginResult] = useLoginUserMutation();
   const [signUp] = useRegisterUserMutation();
   const dispatch = useDispatch();
- 
+
   useEffect(() => {
     if (loginResult.isSuccess) {
       reset();
-      console.log('token', loginResult.data.data.token)
+      console.log('token', loginResult.data.data.token);
       dispatch(setUserLoggedIn(loginResult.data.data.token));
       navigate('/products');
     }
-  }, [loginResult.data])
+  }, [loginResult.data]);
 
   const isRegisterPage = formType === 'register';
   const buttonName = formType === 'login' ? 'Login' : 'Sign Up';
@@ -77,9 +80,15 @@ const AuthentificationForm: FC<AuthentificationFormProps> = ({ formType }) => {
     if (isSubmitting) return;
     try {
       if (isRegisterPage) {
-        await signUp({email: data.emailRequired, password: data.passwordRequired});
+        await signUp({
+          email: data.emailRequired,
+          password: data.passwordRequired,
+        });
       }
-      await login({email: data.emailRequired, password: data.passwordRequired});
+      await login({
+        email: data.emailRequired,
+        password: data.passwordRequired,
+      });
     } catch (e) {
       // TODO: обработать конкретные ответы сервера
       const errorMessage = (e as Error).message;
@@ -143,7 +152,12 @@ const AuthentificationForm: FC<AuthentificationFormProps> = ({ formType }) => {
           <Button type="submit" variant="contained" color="primary">
             {buttonName}
           </Button>
-          <Link component={RouterLink} to={linkPath} variant="body2" alignSelf="end">
+          <Link
+            component={RouterLink}
+            to={linkPath}
+            variant="body2"
+            alignSelf="end"
+          >
             {linkText}
           </Link>
         </Stack>

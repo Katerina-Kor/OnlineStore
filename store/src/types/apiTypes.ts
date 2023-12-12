@@ -28,6 +28,6 @@ export type CartData = {
 };
 
 export type CustomError = {
-  data: ErrorResponce,
-  status: number
-}
+  data: ErrorResponce;
+  status: number;
+};
