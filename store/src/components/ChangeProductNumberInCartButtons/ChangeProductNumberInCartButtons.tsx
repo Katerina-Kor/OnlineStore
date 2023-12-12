@@ -3,12 +3,12 @@ import { FC } from "react";
 import { useUpdateCartMutation } from "../../store/services/cartService";
 import { Add, Remove } from "@mui/icons-material";
 
-type ProductCounterProps = {
+type ChangeProductNumberInCartButtonsProps = {
   currentCount: number;
   productId: string;
 }
 
-const ChangeProductNumberInCartButtons: FC<ProductCounterProps> = ({currentCount, productId}) => {
+const ChangeProductNumberInCartButtons: FC<ChangeProductNumberInCartButtonsProps> = ({currentCount, productId}) => {
   const [ updateCart ] = useUpdateCartMutation();
 
   const handleRemoveProductClick = async () => {

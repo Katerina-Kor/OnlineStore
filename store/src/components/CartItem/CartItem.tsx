@@ -3,6 +3,7 @@ import { ProductsInfoInCart } from "../../types/apiTypes";
 import { ImageListItem, Stack, Typography } from "@mui/material";
 import noImage from '../../assets/img/no-image-icon-23485.png';
 import ChangeProductNumberInCartButtons from "../ChangeProductNumberInCartButtons/ChangeProductNumberInCartButtons";
+import RemoveProductButton from "../RemoveProductButton/RemoveProductButton";
 
 type CartItemProps = {
   cartItem: ProductsInfoInCart;
@@ -35,8 +36,9 @@ const CartItem: FC<CartItemProps> = ({cartItem}) => {
         <Typography variant="body1" textAlign={'center'}>
           {`$${cartItem.product.price} x ${cartItem.count} = $${cartItem.product.price * cartItem.count}`}
         </Typography>
-        <Stack>
+        <Stack direction='row' justifyContent='space-evenly'>
           <ChangeProductNumberInCartButtons currentCount={cartItem.count} productId={cartItem.product.id} />
+          <RemoveProductButton productId={cartItem.product.id} />
         </Stack>
       </Stack>
     </Stack>

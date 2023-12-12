@@ -1,4 +1,4 @@
-import { ImageListItem, Stack, Typography } from "@mui/material";
+import { IconButton, ImageListItem, Stack, Typography } from "@mui/material";
 import { FC } from "react";
 import { getProductNumberInCart } from "../../utils/cartHelpers/cartHelpers";
 import { ProductData } from "../../types/apiTypes";
@@ -9,6 +9,8 @@ import { RootState } from "../../store/store";
 import noImage from '../../assets/img/no-image-icon-23485.png';
 import AddProductToCartButton from "../AddProductToCartButton/AddProductToCartButton";
 import ChangeProductNumberInCartButtons from "../ChangeProductNumberInCartButtons/ChangeProductNumberInCartButtons";
+import { Delete } from "@mui/icons-material";
+import RemoveProductButton from "../RemoveProductButton/RemoveProductButton";
 
 type ProductCardProps = {
   productInfo: ProductData;
@@ -50,7 +52,10 @@ const ProductCard: FC<ProductCardProps> = ({productInfo}) => {
       {currentCount === 0 ? (
         <AddProductToCartButton productId={productInfo.id} />
       ) : (
-        <ChangeProductNumberInCartButtons currentCount={currentCount} productId={productInfo.id} />
+        <Stack direction='row' justifyContent='space-evenly' width={'100%'}>
+          <ChangeProductNumberInCartButtons currentCount={currentCount} productId={productInfo.id} />
+          <RemoveProductButton productId={productInfo.id} />
+        </Stack>
       )}
     </Stack>
   )

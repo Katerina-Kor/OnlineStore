@@ -4,7 +4,6 @@ import { Link as RouterLink } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import { RootState } from '../../../store/store';
 import { useGetCartQuery, useUpdateCartMutation } from '../../../store/services/cartService';
-import ProductCard from '../../ProductCard/ProductCard';
 import CartItem from '../../CartItem/CartItem';
 
 const CartPage: FC = () => {
