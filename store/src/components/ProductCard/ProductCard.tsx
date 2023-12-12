@@ -33,6 +33,7 @@ const ProductCard: FC<ProductCardProps> = ({ productInfo }) => {
       spacing={1}
       justifyContent={'center'}
       alignItems={'center'}
+      width={'100%'}
       sx={{ border: '1px solid gray', borderRadius: '5px' }}
       onClick={(event) => {
         if (event.target instanceof Element && event.target.closest('button'))

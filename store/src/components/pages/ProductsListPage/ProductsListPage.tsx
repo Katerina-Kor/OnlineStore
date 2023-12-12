@@ -1,6 +1,6 @@
 import { FC, useEffect } from 'react';
 import { Link as RouterLink } from 'react-router-dom';
-import { Link, Stack, Typography } from '@mui/material';
+import { Grid, Link, Stack, Typography } from '@mui/material';
 import { useDispatch, useSelector } from 'react-redux';
 import { RootState } from '../../../store/store';
 import { useGetProductsListQuery } from '../../../store/services/cartService';
@@ -72,19 +72,26 @@ const ProductsListPage: FC = () => {
       >
         Products
       </Typography>
-      <Stack
-        direction={'row'}
-        gap={2}
-        flexWrap={'wrap'}
-        justifyContent={'center'}
-        padding={3}
+      <Grid
+        container
+        spacing={3}
+        width={'100%'}
       >
         {productsData &&
           productsData.data.map((product) => (
-            <ProductCard productInfo={product} key={product.id} />
+            <Grid
+              item
+              key={product.id}
+              xs={12}
+              sm={6}
+              md={4}
+              sx={{display: 'flex', justifyContent: 'center'}}
+            >
+              <ProductCard productInfo={product} key={product.id} />
+            </Grid>
           ))}
         {isFetching && <p>Loading ...</p>}
-      </Stack>
+      </Grid>
     </Stack>
   );
 };
