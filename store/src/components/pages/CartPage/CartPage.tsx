@@ -40,9 +40,20 @@ const CartPage: FC = () => {
 
   if (createOrderResult.status === 'fulfilled') {
     return (
-      <Typography>
-        Thank you for your order!
-      </Typography>
+      <Stack spacing={2} alignItems={'center'}>
+        <Typography textAlign={'center'} variant="h6" padding="20px">
+          Thank you for your order! We will contact you soon.
+        </Typography>
+        <Button
+          role='link'
+          size="large"
+          variant="contained"
+          onClick={() => navigate('/products')}
+          sx={{width: '80%'}}  
+        >
+          continue shopping
+        </Button>
+      </Stack>
     )
   }
 
@@ -75,14 +86,20 @@ const CartPage: FC = () => {
       >
         {cartData &&
           (isCartEmpty(cartData.data.cart.items) ? (
-            <Stack gap={1}>
+            <Stack gap={1} alignItems={'center'}>
               <Typography variant="h6" textAlign={'center'}>
                 Cart is empty
               </Typography>
               <Typography variant='body1' textAlign='center'>
                 Visit catalog to select products
               </Typography>
-              <Button role='link' size="large" variant="contained" onClick={() => navigate('/products')}>
+              <Button
+                role='link'
+                size="large"
+                variant="contained"
+                onClick={() => navigate('/products')}
+                sx={{width: '80%'}}
+              >
                 go shopping
               </Button>
             </Stack>
@@ -93,11 +110,12 @@ const CartPage: FC = () => {
                   <CartItem cartItem={cartItem} key={cartItem.product.id} />
                 ) : null
               )}
-              <Stack gap={1}>
+              <Stack gap={1} alignItems={'center'} >
                 <Stack
                   direction="row"
                   justifyContent="space-between"
                   padding={2}
+                  width={'100%'}
                 >
                   <Typography variant="h6" sx={{ fontWeight: 'bold' }}>
                     Total:
@@ -106,10 +124,15 @@ const CartPage: FC = () => {
                     {`$${cartData.data.total}`}
                   </Typography>
                 </Stack>
-                <Button size="large" variant="contained" onClick={async () => {
-                  await createOrder();
-                  await clearCart();
-                }}>
+                <Button
+                  size="large"
+                  variant="contained"
+                  onClick={async () => {
+                    await createOrder();
+                    await clearCart();
+                  }}
+                  sx={{width: '100%'}}
+                >
                   Order
                 </Button>
               </Stack>
