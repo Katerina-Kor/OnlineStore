@@ -48,17 +48,29 @@ const AuthentificationForm: FC<AuthentificationFormProps> = ({ formType }) => {
   const [passwordType, setPasswordType] = useState<PasswordType>('password');
   const navigate = useNavigate();
   const [login, loginResult] = useLoginUserMutation();
-  const [signUp] = useRegisterUserMutation();
+  const [signUp, signUpResult] = useRegisterUserMutation();
   const dispatch = useDispatch();
 
   useEffect(() => {
     if (loginResult.isSuccess) {
       reset();
-      console.log('token', loginResult.data.data.token);
       dispatch(setUserLoggedIn(loginResult.data.data.token));
       navigate('/products');
+    };
+    if (loginResult.error && 'status' in loginResult.error) {
+      setError('root.serverError', {
+        message: loginResult.error.data.error.message,
+      });
     }
-  }, [loginResult.data]);
+  }, [loginResult]);
+
+  useEffect(() => {
+    if (signUpResult.error && 'status' in signUpResult.error) {
+      setError('root.serverError', {
+        message: signUpResult.error.data.error.message,
+      });
+    }
+  }, [signUpResult]);
 
   const isRegisterPage = formType === 'register';
   const buttonName = formType === 'login' ? 'Login' : 'Sign Up';
@@ -80,10 +92,12 @@ const AuthentificationForm: FC<AuthentificationFormProps> = ({ formType }) => {
     if (isSubmitting) return;
     try {
       if (isRegisterPage) {
-        await signUp({
+        const res = await signUp({
           email: data.emailRequired,
           password: data.passwordRequired,
         });
+        console.log('signup', res )
+        if ('error' in res) return;
       }
       await login({
         email: data.emailRequired,

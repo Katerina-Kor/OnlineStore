@@ -6,6 +6,7 @@ import { RootState } from '../../../store/store';
 import { useGetProductsListQuery } from '../../../store/services/cartService';
 import { setUserLoggedOut } from '../../../store/reducers/authSlice';
 import ProductCard from '../../ProductCard/ProductCard';
+import Cover from '../../Cover/Cover';
 
 const ProductsListPage: FC = () => {
   const isLoggedIn = useSelector((state: RootState) => state.auth.isLoggedIn);
@@ -50,11 +51,7 @@ const ProductsListPage: FC = () => {
 
   if (!isLoggedIn) {
     return (
-      <Stack spacing={2} justifyContent={'center'}>
-        <Link component={RouterLink} to="/login" variant="h5">
-          Please, login to continue
-        </Link>
-      </Stack>
+      <Cover isOpen />
     );
   }
 

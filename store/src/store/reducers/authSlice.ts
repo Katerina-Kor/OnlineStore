@@ -16,12 +16,10 @@ export const authSlice = createSlice({
     setUserLoggedIn: (state, action: PayloadAction<string>) => {
       tokenStorageInstance.setToken(action.payload);
       state.isLoggedIn = true;
-      console.log('ping', tokenStorageInstance.getToken());
     },
     setUserLoggedOut: (state) => {
       tokenStorageInstance.clearToken();
       state.isLoggedIn = false;
-      console.log('clear token');
     },
   },
 });

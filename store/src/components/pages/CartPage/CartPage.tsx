@@ -2,9 +2,6 @@ import { FC } from 'react';
 import {
   Button,
   Link,
-  List,
-  ListItem,
-  ListItemText,
   Stack,
   Typography,
 } from '@mui/material';
@@ -12,11 +9,13 @@ import { Link as RouterLink, useNavigate } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import { RootState } from '../../../store/store';
 import {
+  useCreateOrderMutation,
   useGetCartQuery,
   useUpdateCartMutation,
 } from '../../../store/services/cartService';
 import CartItem from '../../CartItem/CartItem';
 import { isCartEmpty } from '../../../utils/cartHelpers/cartHelpers';
+import Cover from '../../Cover/Cover';
 
 const CartPage: FC = () => {
   const isLoggedIn = useSelector((state: RootState) => state.auth.isLoggedIn);
@@ -25,15 +24,31 @@ const CartPage: FC = () => {
     skip: !isLoggedIn,
   });
   const [updateCart, updateCartResult] = useUpdateCartMutation();
+  const [createOrder, createOrderResult] = useCreateOrderMutation();
   const navigate = useNavigate();
+
+  const clearCart = async () => {
+    if (!cartData) return;
+    const updateCartPromises = cartData.data.cart.items.map(
+      (product, index, arr) => {
+        const needValidate = index === arr.length - 1 ? true : false;
+        return updateCart({ productId: product.product.id, count: 0, needValidate })
+      }
+    );
+    await Promise.all(updateCartPromises);
+  }
+
+  if (createOrderResult.status === 'fulfilled') {
+    return (
+      <Typography>
+        Thank you for your order!
+      </Typography>
+    )
+  }
 
   if (!isLoggedIn) {
     return (
-      <Stack spacing={2} justifyContent={'center'}>
-        <Link component={RouterLink} to="/login" variant="h5">
-          Please, login to continue
-        </Link>
-      </Stack>
+      <Cover isOpen />
     );
   }
 
@@ -91,7 +106,10 @@ const CartPage: FC = () => {
                     {`$${cartData.data.total}`}
                   </Typography>
                 </Stack>
-                <Button size="large" variant="contained">
+                <Button size="large" variant="contained" onClick={async () => {
+                  await createOrder();
+                  await clearCart();
+                }}>
                   Order
                 </Button>
               </Stack>

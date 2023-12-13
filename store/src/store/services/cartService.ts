@@ -6,7 +6,7 @@ import {
 } from '@reduxjs/toolkit/query/react';
 import { BASE_URL } from '../../constants/apiConstants';
 import tokenStorageInstance from '../../utils/tokenStorage/tokenStorage';
-import { CartData, CustomError, ProductData } from '../../types/apiTypes';
+import { CartData, CustomError, ProductData, SuccessCheckoutResponce } from '../../types/apiTypes';
 
 type SuccessCartResponce = {
   data: CartData;
@@ -115,6 +115,12 @@ export const cartApi = createApi({
         url: `/products/${productId}`,
       }),
     }),
+    createOrder: build.mutation<SuccessCheckoutResponce, void>({
+      query: () => ({
+        url: '/profile/cart/checkout',
+        method: 'POST',
+      }),
+    })
   }),
 });
 
@@ -126,4 +132,5 @@ export const {
   useGetProductsListQuery,
   useLoginUserMutation,
   useRegisterUserMutation,
+  useCreateOrderMutation,
 } = cartApi;

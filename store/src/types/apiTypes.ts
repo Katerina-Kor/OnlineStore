@@ -31,3 +31,33 @@ export type CustomError = {
   data: ErrorResponce;
   status: number;
 };
+
+export type SuccessCheckoutResponce = {
+  data: OrderData;
+  error: null;
+}
+
+type OrderData = {
+  order: {
+    id: string;
+    userId: string;
+    cartId: string;
+    items: ProductsInfoInCart[];
+    payment: PaymentData;
+    delivery: DeliveryData;
+    comments: string;
+    status: string;
+    total: number;
+  }
+}
+
+type PaymentData = {
+  type: string;
+  address: string;
+  creditCard: string;
+}
+
+type DeliveryData = {
+  type: string;
+  address: string;
+}
