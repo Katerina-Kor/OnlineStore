@@ -21,6 +21,7 @@ import {
   useLoginUserMutation,
   useRegisterUserMutation,
 } from '../../../store/services/cartService';
+import { getFetchBaseQueryErrorMessage, isFetchBaseQueryError } from '../../../types/apiTypes';
 
 type PasswordType = 'password' | 'text';
 
@@ -57,17 +58,17 @@ const AuthentificationForm: FC<AuthentificationFormProps> = ({ formType }) => {
       dispatch(setUserLoggedIn(loginResult.data.data.token));
       navigate('/products');
     };
-    if (loginResult.error && 'status' in loginResult.error) {
+    if (isFetchBaseQueryError(loginResult.error)) {
       setError('root.serverError', {
-        message: loginResult.error.data.error.message,
+        message: getFetchBaseQueryErrorMessage(loginResult.error),
       });
     }
   }, [loginResult]);
 
   useEffect(() => {
-    if (signUpResult.error && 'status' in signUpResult.error) {
+    if (isFetchBaseQueryError(signUpResult.error)) {
       setError('root.serverError', {
-        message: signUpResult.error.data.error.message,
+        message: getFetchBaseQueryErrorMessage(signUpResult.error),
       });
     }
   }, [signUpResult]);
@@ -90,26 +91,17 @@ const AuthentificationForm: FC<AuthentificationFormProps> = ({ formType }) => {
 
   const onSubmit: SubmitHandler<AuthFormData> = async (data) => {
     if (isSubmitting) return;
-    try {
-      if (isRegisterPage) {
-        const res = await signUp({
-          email: data.emailRequired,
-          password: data.passwordRequired,
-        });
-        console.log('signup', res )
-        if ('error' in res) return;
-      }
-      await login({
+    if (isRegisterPage) {
+      const signUpResult = await signUp({
         email: data.emailRequired,
         password: data.passwordRequired,
       });
-    } catch (e) {
-      // TODO: обработать конкретные ответы сервера
-      const errorMessage = (e as Error).message;
-      setError('root.serverError', {
-        message: errorMessage,
-      });
+      if ('error' in signUpResult) return;
     }
+    await login({
+      email: data.emailRequired,
+      password: data.passwordRequired,
+    });
   };
 
   const onInput = () => {
@@ -124,7 +116,7 @@ const AuthentificationForm: FC<AuthentificationFormProps> = ({ formType }) => {
   return (
     <>
       <form onSubmit={handleSubmit(onSubmit)} noValidate>
-        <Stack spacing={2} width={400}>
+        <Stack gap={1} width={400}>
           <TextField
             label="Email"
             type="text"
@@ -133,7 +125,10 @@ const AuthentificationForm: FC<AuthentificationFormProps> = ({ formType }) => {
               validate: emailValidationRules,
             })}
             error={!!errors.emailRequired || !!errors.root?.serverError}
-            helperText={errors.emailRequired?.message}
+            helperText={errors.emailRequired?.message || ' '}
+            FormHelperTextProps={{
+              hidden: false,
+            }}
             required
             onInput={onInput}
           />
@@ -145,7 +140,10 @@ const AuthentificationForm: FC<AuthentificationFormProps> = ({ formType }) => {
               validate: passwordValidationRules,
             })}
             error={!!errors.passwordRequired || !!errors.root?.serverError}
-            helperText={errors.passwordRequired?.message || ''}
+            helperText={errors.passwordRequired?.message || ' '}
+            FormHelperTextProps={{
+              hidden: false,
+            }}
             required
             InputProps={{
               endAdornment: (
@@ -160,7 +158,7 @@ const AuthentificationForm: FC<AuthentificationFormProps> = ({ formType }) => {
             }}
             onInput={onInput}
           />
-          <Typography color="error" textAlign="center">
+          <Typography color="error" textAlign="center" height={20}>
             {errors.root?.serverError.message}
           </Typography>
           <Button type="submit" variant="contained" color="primary">

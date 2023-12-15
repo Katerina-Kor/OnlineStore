@@ -1,6 +1,7 @@
-import { Link, Stack } from '@mui/material';
+import { Stack } from '@mui/material';
 import { FC } from 'react';
-import { Link as RouterLink } from 'react-router-dom';
+import { NavLink as RouterNavLink } from 'react-router-dom';
+import styles from './navLinksList.module.css';
 
 type NavLinksListProps = {
   navLinks: NavLink[];
@@ -12,6 +13,7 @@ type NavLink = {
 };
 
 const NavLinksList: FC<NavLinksListProps> = ({ navLinks }) => {
+  
   return (
     <Stack
       component="nav"
@@ -20,16 +22,15 @@ const NavLinksList: FC<NavLinksListProps> = ({ navLinks }) => {
       sx={{ flexGrow: 1 }}
     >
       {navLinks.map((navLink) => (
-        <Link
-          component={RouterLink}
-          variant="button"
-          color="text.primary"
+        <RouterNavLink
           to={navLink.href}
-          sx={{ my: 1, mx: 1.5 }}
+          className={({isActive}) => 
+            isActive ? styles.navLink_active : styles.navLink
+          } 
           key={navLink.name}
         >
           {navLink.name}
-        </Link>
+        </RouterNavLink>
       ))}
     </Stack>
   );

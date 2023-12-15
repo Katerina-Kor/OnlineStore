@@ -1,12 +1,10 @@
 import {
-  BaseQueryFn,
-  FetchArgs,
   createApi,
   fetchBaseQuery,
 } from '@reduxjs/toolkit/query/react';
 import { BASE_URL } from '../../constants/apiConstants';
 import tokenStorageInstance from '../../utils/tokenStorage/tokenStorage';
-import { CartData, CustomError, ProductData, SuccessCheckoutResponce } from '../../types/apiTypes';
+import { CartData, ProductData, SuccessCheckoutResponce } from '../../types/apiTypes';
 
 type SuccessCartResponce = {
   data: CartData;
@@ -63,7 +61,7 @@ export const cartApi = createApi({
       headers.set('Content-Type', `application/json`);
       return headers;
     },
-  }) as BaseQueryFn<string | FetchArgs, unknown, CustomError, {}>,
+  }),
   tagTypes: ['UpdateCart', 'UpdateProducts'],
   endpoints: (build) => ({
     getCart: build.query<SuccessCartResponce, void>({
@@ -78,7 +76,7 @@ export const cartApi = createApi({
         method: 'PUT',
         body: JSON.stringify({ productId, count }),
       }),
-      invalidatesTags: (result, error, args) => {
+      invalidatesTags: (_result, _error, args) => {
         return args.needValidate ? ['UpdateCart'] : [];
       },
     }),

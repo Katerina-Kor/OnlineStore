@@ -8,6 +8,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { RootState } from '../../store/store';
 import { setUserLoggedOut } from '../../store/reducers/authSlice';
 import { getTotalItems } from '../../utils/cartHelpers/cartHelpers';
+import { isFetchBaseQueryError } from '../../types/apiTypes';
 
 const navLinksForUnloggedUser = [
   {
@@ -24,17 +25,15 @@ const navLinksForLoggedUser = navLinksForUnloggedUser.concat({
 const Header: FC = () => {
   const isLoggedIn = useSelector((state: RootState) => state.auth.isLoggedIn);
   const dispatch = useDispatch();
-  const { data, error, isLoading } = useGetCartQuery(undefined, {
+  const { data: cartData, error: cartError, isLoading } = useGetCartQuery(undefined, {
     skip: !isLoggedIn,
   });
-  console.log('header', isLoggedIn);
 
   useEffect(() => {
-    if (error && 'status' in error && error.status === 401) {
+    if (isFetchBaseQueryError(cartError) && cartError.status === 401) {
       dispatch(setUserLoggedOut());
-      console.log('header clear');
     }
-  }, [error]);
+  }, [cartError]);
 
   return (
     <>
@@ -55,8 +54,8 @@ const Header: FC = () => {
               }
             />
             <UserMenu />
-            {data && (
-              <CartIcon productsNumber={getTotalItems(data.data.cart.items)} />
+            {cartData && (
+              <CartIcon productsNumber={getTotalItems(cartData.data.cart.items)} />
             )}
           </Toolbar>
         </AppBar>

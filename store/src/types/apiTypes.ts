@@ -1,5 +1,24 @@
+import { SerializedError } from "@reduxjs/toolkit";
+import { FetchBaseQueryError } from "@reduxjs/toolkit/query";
+
 export function isError<T>(data: T | ErrorResponce): data is ErrorResponce {
   return (data as ErrorResponce).error !== null;
+}
+
+export function isFetchBaseQueryError<T>(data: T | FetchBaseQueryError | undefined): data is FetchBaseQueryError {
+  if (typeof data === 'undefined') return false;
+  return (data as FetchBaseQueryError).status !== null;
+}
+
+export function getFetchBaseQueryErrorMessage(error: FetchBaseQueryError): string {
+  if (typeof error.status === 'number') {
+    return (error.data as ErrorResponce).error.message;
+  }
+  return error.error;
+}
+
+export function isSerializedError<T>(data: T | SerializedError): data is SerializedError {
+  return (data as SerializedError).name !== null;
 }
 
 export type ErrorResponce = {
@@ -27,7 +46,7 @@ export type CartData = {
   total: number;
 };
 
-export type CustomError = {
+export interface CustomError {
   data: ErrorResponce;
   status: number;
 };
@@ -60,4 +79,12 @@ type PaymentData = {
 type DeliveryData = {
   type: string;
   address: string;
+}
+
+export enum HttpStatus {
+  BAD_REQUEST = 400,
+  UNAUTHORIZED = 401,
+  FORBIDDEN = 403,
+  NOT_FOUND = 404,
+  INTERNAL_SERVER_ERROR = 500,
 }
