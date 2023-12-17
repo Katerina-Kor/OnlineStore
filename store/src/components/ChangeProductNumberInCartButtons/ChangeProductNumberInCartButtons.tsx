@@ -9,17 +9,19 @@ import {
 } from '../../types/apiTypes';
 import { setUserLoggedOut } from '../../store/reducers/authSlice';
 import { useDispatch } from 'react-redux';
+import {
+  setErrorMessage,
+  setShowErrorAlert,
+} from '../../store/reducers/errorAlertSlice';
 
 type ChangeProductNumberInCartButtonsProps = {
   currentCount: number;
   productId: string;
-  openErrorMessage: () => void;
-  setErrorMessage: (message: string | undefined) => void;
 };
 
 const ChangeProductNumberInCartButtons: FC<
   ChangeProductNumberInCartButtonsProps
-> = ({ currentCount, productId, openErrorMessage, setErrorMessage }) => {
+> = ({ currentCount, productId }) => {
   const [updateCart, updateCartResult] = useUpdateCartMutation();
   const dispatch = useDispatch();
 
@@ -31,8 +33,8 @@ const ChangeProductNumberInCartButtons: FC<
     ) {
       dispatch(setUserLoggedOut());
     } else {
-      openErrorMessage();
-      setErrorMessage(getErrorMessage(updateCartResult.error));
+      dispatch(setShowErrorAlert());
+      dispatch(setErrorMessage(getErrorMessage(updateCartResult.error)));
     }
   }, [updateCartResult.error]);
 

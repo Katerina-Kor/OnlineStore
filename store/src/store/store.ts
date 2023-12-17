@@ -1,14 +1,12 @@
 import { configureStore, combineReducers } from '@reduxjs/toolkit';
 import { cartApi } from './services/cartService';
 import authReducer from './reducers/authSlice';
-// import { authApi } from './services/authService';
-// import { productsApi } from './services/productsService';
+import errorAlertReducer from './reducers/errorAlertSlice';
 
 const rootReducer = combineReducers({
   auth: authReducer,
+  errorAlert: errorAlertReducer,
   [cartApi.reducerPath]: cartApi.reducer,
-  // [authApi.reducerPath]: authApi.reducer,
-  // [productsApi.reducerPath]: productsApi.reducer,
 });
 
 export const setupStore = () => {

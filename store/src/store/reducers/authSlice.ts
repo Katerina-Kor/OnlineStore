@@ -20,6 +20,7 @@ export const authSlice = createSlice({
     setUserLoggedOut: (state) => {
       tokenStorageInstance.clearToken();
       state.isLoggedIn = false;
+      console.log('slice logout');
     },
   },
 });

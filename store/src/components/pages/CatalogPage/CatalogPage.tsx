@@ -6,7 +6,11 @@ import { useGetProductsListQuery } from '../../../store/services/cartService';
 import { setUserLoggedOut } from '../../../store/reducers/authSlice';
 import ProductCard from '../../ProductCard/ProductCard';
 import Cover from '../../Cover/Cover';
-import { HttpStatus, isFetchBaseQueryError } from '../../../types/apiTypes';
+import {
+  HttpStatus,
+  getErrorMessage,
+  isFetchBaseQueryError,
+} from '../../../types/apiTypes';
 import ErrorFallback from '../../ErrorFallback/ErrorFallback';
 
 const CatalogPage: FC = () => {
@@ -64,7 +68,9 @@ const CatalogPage: FC = () => {
           ))}
         </Grid>
       )}
-      {productsError && <ErrorFallback />}
+      {productsError && (
+        <ErrorFallback errorMessage={getErrorMessage(productsError)} />
+      )}
       {isFetching && <CircularProgress sx={{ margin: 0, padding: 5 }} />}
     </Stack>
   );

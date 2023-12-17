@@ -8,17 +8,17 @@ import {
 } from '../../types/apiTypes';
 import { useDispatch } from 'react-redux';
 import { setUserLoggedOut } from '../../store/reducers/authSlice';
+import {
+  setErrorMessage,
+  setShowErrorAlert,
+} from '../../store/reducers/errorAlertSlice';
 
 type AddProductToCartButtonProps = {
   productId: string;
-  openErrorMessage: () => void;
-  setErrorMessage: (message: string | undefined) => void;
 };
 
 const AddProductToCartButton: FC<AddProductToCartButtonProps> = ({
   productId,
-  openErrorMessage,
-  setErrorMessage,
 }) => {
   const dispatch = useDispatch();
   const [updateCart, updateCartResult] = useUpdateCartMutation();
@@ -31,8 +31,8 @@ const AddProductToCartButton: FC<AddProductToCartButtonProps> = ({
     ) {
       dispatch(setUserLoggedOut());
     } else {
-      openErrorMessage();
-      setErrorMessage(getErrorMessage(updateCartResult.error));
+      dispatch(setShowErrorAlert());
+      dispatch(setErrorMessage(getErrorMessage(updateCartResult.error)));
     }
   }, [updateCartResult.error]);
 
@@ -46,10 +46,11 @@ const AddProductToCartButton: FC<AddProductToCartButtonProps> = ({
         type="button"
         sx={{ width: 135 }}
       >
-        {updateCartResult.isLoading
-          ? <CircularProgress color="inherit" size={25} />
-          : 'Add to cart'
-        }
+        {updateCartResult.isLoading ? (
+          <CircularProgress color="inherit" size={25} />
+        ) : (
+          'Add to cart'
+        )}
       </Button>
     </>
   );

@@ -1,6 +1,5 @@
-import { FC } from 'react';
-import { Button, Link, Stack, Typography } from '@mui/material';
-import { Link as RouterLink, useNavigate } from 'react-router-dom';
+import { FC, useEffect } from 'react';
+import { Button, CircularProgress, Stack, Typography } from '@mui/material';
 import { useDispatch, useSelector } from 'react-redux';
 import { RootState } from '../../../store/store';
 import {
@@ -11,16 +10,63 @@ import {
 import CartItem from '../../CartItem/CartItem';
 import { isCartEmpty } from '../../../utils/cartHelpers/cartHelpers';
 import Cover from '../../Cover/Cover';
+import CreateOrderFallback from '../../CreateOrderFallback/CreateOrderFallback';
+import {
+  HttpStatus,
+  getErrorMessage,
+  isFetchBaseQueryError,
+} from '../../../types/apiTypes';
+import { setUserLoggedOut } from '../../../store/reducers/authSlice';
+import ErrorFallback from '../../ErrorFallback/ErrorFallback';
+import EmptyCartFallback from '../../EmptyCartFallback/EmptyCartFallback';
+import {
+  setErrorMessage,
+  setShowErrorAlert,
+} from '../../../store/reducers/errorAlertSlice';
 
 const CartPage: FC = () => {
   const isLoggedIn = useSelector((state: RootState) => state.auth.isLoggedIn);
   const dispatch = useDispatch();
-  const { data: cartData, isError } = useGetCartQuery(undefined, {
+  const {
+    data: cartData,
+    error: cartError,
+    isFetching,
+  } = useGetCartQuery(undefined, {
     skip: !isLoggedIn,
   });
   const [updateCart, updateCartResult] = useUpdateCartMutation();
   const [createOrder, createOrderResult] = useCreateOrderMutation();
-  const navigate = useNavigate();
+
+  useEffect(() => {
+    if (
+      isFetchBaseQueryError(cartError) &&
+      cartError.status === HttpStatus.UNAUTHORIZED
+    ) {
+      dispatch(setUserLoggedOut());
+    }
+  }, [cartError]);
+
+  useEffect(() => {
+    if (!updateCartResult.error) return;
+    if (
+      isFetchBaseQueryError(updateCartResult.error) &&
+      updateCartResult.error.status === HttpStatus.UNAUTHORIZED
+    ) {
+      dispatch(setUserLoggedOut());
+    } else {
+      dispatch(setShowErrorAlert());
+      dispatch(setErrorMessage(getErrorMessage(updateCartResult.error)));
+    }
+  }, [updateCartResult.error]);
+
+  useEffect(() => {
+    if (
+      isFetchBaseQueryError(createOrderResult.error) &&
+      createOrderResult.error.status === HttpStatus.UNAUTHORIZED
+    ) {
+      dispatch(setUserLoggedOut());
+    }
+  }, [createOrderResult.error]);
 
   const clearCart = async () => {
     if (!cartData) return;
@@ -37,31 +83,18 @@ const CartPage: FC = () => {
     await Promise.all(updateCartPromises);
   };
 
+  const handleCreateOrder = async () => {
+    const createOrderResult = await createOrder();
+    if ('error' in createOrderResult) return;
+    await clearCart();
+  };
+
   if (createOrderResult.status === 'fulfilled') {
-    return (
-      <Stack spacing={2} alignItems={'center'}>
-        <Typography textAlign={'center'} variant="h6" padding="20px">
-          Thank you for your order! We will contact you soon.
-        </Typography>
-        <Button
-          role="link"
-          size="large"
-          variant="contained"
-          onClick={() => navigate('/products')}
-          sx={{ width: '80%' }}
-        >
-          continue shopping
-        </Button>
-      </Stack>
-    );
+    return <CreateOrderFallback />;
   }
 
   if (!isLoggedIn) {
     return <Cover isOpen />;
-  }
-
-  if (isError) {
-    return <p>error</p>;
   }
 
   return (
@@ -83,23 +116,7 @@ const CartPage: FC = () => {
       >
         {cartData &&
           (isCartEmpty(cartData.data.cart.items) ? (
-            <Stack gap={1} alignItems={'center'}>
-              <Typography variant="h6" textAlign={'center'}>
-                Cart is empty
-              </Typography>
-              <Typography variant="body1" textAlign="center">
-                Visit catalog to select products
-              </Typography>
-              <Button
-                role="link"
-                size="large"
-                variant="contained"
-                onClick={() => navigate('/products')}
-                sx={{ width: '80%' }}
-              >
-                go shopping
-              </Button>
-            </Stack>
+            <EmptyCartFallback />
           ) : (
             <>
               {cartData.data.cart.items.map((cartItem) =>
@@ -124,18 +141,24 @@ const CartPage: FC = () => {
                 <Button
                   size="large"
                   variant="contained"
-                  onClick={async () => {
-                    await createOrder();
-                    await clearCart();
-                  }}
+                  onClick={handleCreateOrder}
                   sx={{ width: '100%' }}
                 >
-                  Order
+                  {createOrderResult.isLoading ? (
+                    <CircularProgress color="inherit" size={25} />
+                  ) : (
+                    'Order'
+                  )}
                 </Button>
               </Stack>
             </>
           ))}
       </Stack>
+      {cartError && <ErrorFallback errorMessage={getErrorMessage(cartError)} />}
+      {updateCartResult.error && (
+        <ErrorFallback errorMessage={getErrorMessage(updateCartResult.error)} />
+      )}
+      {isFetching && <CircularProgress sx={{ margin: 0, padding: 5 }} />}
     </Stack>
   );
 };

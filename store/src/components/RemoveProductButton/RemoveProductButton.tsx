@@ -9,18 +9,16 @@ import {
   getErrorMessage,
   isFetchBaseQueryError,
 } from '../../types/apiTypes';
+import {
+  setErrorMessage,
+  setShowErrorAlert,
+} from '../../store/reducers/errorAlertSlice';
 
 type RemoveProductButtonProps = {
   productId: string;
-  openErrorMessage: () => void;
-  setErrorMessage: (message: string | undefined) => void;
 };
 
-const RemoveProductButton: FC<RemoveProductButtonProps> = ({
-  productId,
-  openErrorMessage,
-  setErrorMessage,
-}) => {
+const RemoveProductButton: FC<RemoveProductButtonProps> = ({ productId }) => {
   const [updateCart, updateCartResult] = useUpdateCartMutation();
   const dispatch = useDispatch();
 
@@ -32,8 +30,8 @@ const RemoveProductButton: FC<RemoveProductButtonProps> = ({
     ) {
       dispatch(setUserLoggedOut());
     } else {
-      openErrorMessage();
-      setErrorMessage(getErrorMessage(updateCartResult.error));
+      dispatch(setShowErrorAlert());
+      dispatch(setErrorMessage(getErrorMessage(updateCartResult.error)));
     }
   }, [updateCartResult.error]);
 
