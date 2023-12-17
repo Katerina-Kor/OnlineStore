@@ -13,7 +13,6 @@ type NavLink = {
 };
 
 const NavLinksList: FC<NavLinksListProps> = ({ navLinks }) => {
-  
   return (
     <Stack
       component="nav"
@@ -24,9 +23,9 @@ const NavLinksList: FC<NavLinksListProps> = ({ navLinks }) => {
       {navLinks.map((navLink) => (
         <RouterNavLink
           to={navLink.href}
-          className={({isActive}) => 
+          className={({ isActive }) =>
             isActive ? styles.navLink_active : styles.navLink
-          } 
+          }
           key={navLink.name}
         >
           {navLink.name}

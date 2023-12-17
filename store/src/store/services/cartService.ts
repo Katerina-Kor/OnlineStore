@@ -1,10 +1,11 @@
-import {
-  createApi,
-  fetchBaseQuery,
-} from '@reduxjs/toolkit/query/react';
+import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react';
 import { BASE_URL } from '../../constants/apiConstants';
 import tokenStorageInstance from '../../utils/tokenStorage/tokenStorage';
-import { CartData, ProductData, SuccessCheckoutResponce } from '../../types/apiTypes';
+import {
+  CartData,
+  ProductData,
+  SuccessCheckoutResponce,
+} from '../../types/apiTypes';
 
 type SuccessCartResponce = {
   data: CartData;
@@ -118,7 +119,7 @@ export const cartApi = createApi({
         url: '/profile/cart/checkout',
         method: 'POST',
       }),
-    })
+    }),
   }),
 });
 

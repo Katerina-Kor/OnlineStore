@@ -11,7 +11,7 @@ const DetailedProductCard: FC = () => {
   const isLoggedIn = useSelector((state: RootState) => state.auth.isLoggedIn);
   const { data: productData } = useGetProductQuery(productId, {
     skip: !isLoggedIn,
-  })
+  });
 
   // useEffect(() => {
   //   const fetchData = async () => {
@@ -28,9 +28,7 @@ const DetailedProductCard: FC = () => {
   // }, [productId]);
 
   if (!isLoggedIn) {
-    return (
-      <Cover isOpen />
-    );
+    return <Cover isOpen />;
   }
 
   return (
@@ -43,9 +41,7 @@ const DetailedProductCard: FC = () => {
       >
         Product details
       </Typography>
-      <Stack>
-        
-      </Stack>
+      <Stack></Stack>
     </Stack>
     // <div>
     //   <h3>detailed product</h3>

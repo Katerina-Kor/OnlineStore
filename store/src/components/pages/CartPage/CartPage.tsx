@@ -1,10 +1,5 @@
 import { FC } from 'react';
-import {
-  Button,
-  Link,
-  Stack,
-  Typography,
-} from '@mui/material';
+import { Button, Link, Stack, Typography } from '@mui/material';
 import { Link as RouterLink, useNavigate } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import { RootState } from '../../../store/store';
@@ -32,11 +27,15 @@ const CartPage: FC = () => {
     const updateCartPromises = cartData.data.cart.items.map(
       (product, index, arr) => {
         const needValidate = index === arr.length - 1 ? true : false;
-        return updateCart({ productId: product.product.id, count: 0, needValidate })
+        return updateCart({
+          productId: product.product.id,
+          count: 0,
+          needValidate,
+        });
       }
     );
     await Promise.all(updateCartPromises);
-  }
+  };
 
   if (createOrderResult.status === 'fulfilled') {
     return (
@@ -45,22 +44,20 @@ const CartPage: FC = () => {
           Thank you for your order! We will contact you soon.
         </Typography>
         <Button
-          role='link'
+          role="link"
           size="large"
           variant="contained"
           onClick={() => navigate('/products')}
-          sx={{width: '80%'}}  
+          sx={{ width: '80%' }}
         >
           continue shopping
         </Button>
       </Stack>
-    )
+    );
   }
 
   if (!isLoggedIn) {
-    return (
-      <Cover isOpen />
-    );
+    return <Cover isOpen />;
   }
 
   if (isError) {
@@ -90,15 +87,15 @@ const CartPage: FC = () => {
               <Typography variant="h6" textAlign={'center'}>
                 Cart is empty
               </Typography>
-              <Typography variant='body1' textAlign='center'>
+              <Typography variant="body1" textAlign="center">
                 Visit catalog to select products
               </Typography>
               <Button
-                role='link'
+                role="link"
                 size="large"
                 variant="contained"
                 onClick={() => navigate('/products')}
-                sx={{width: '80%'}}
+                sx={{ width: '80%' }}
               >
                 go shopping
               </Button>
@@ -110,7 +107,7 @@ const CartPage: FC = () => {
                   <CartItem cartItem={cartItem} key={cartItem.product.id} />
                 ) : null
               )}
-              <Stack gap={1} alignItems={'center'} >
+              <Stack gap={1} alignItems={'center'}>
                 <Stack
                   direction="row"
                   justifyContent="space-between"
@@ -131,7 +128,7 @@ const CartPage: FC = () => {
                     await createOrder();
                     await clearCart();
                   }}
-                  sx={{width: '100%'}}
+                  sx={{ width: '100%' }}
                 >
                   Order
                 </Button>

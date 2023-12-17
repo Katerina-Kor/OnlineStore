@@ -1,5 +1,5 @@
-import { IconButton, ImageListItem, Stack, Typography } from '@mui/material';
-import { FC } from 'react';
+import { ImageListItem, Stack, Typography } from '@mui/material';
+import { FC, useState } from 'react';
 import { getProductNumberInCart } from '../../utils/cartHelpers/cartHelpers';
 import { ProductData } from '../../types/apiTypes';
 import { useNavigate } from 'react-router-dom';
@@ -9,8 +9,8 @@ import { RootState } from '../../store/store';
 import noImage from '../../assets/img/no-image-icon-23485.png';
 import AddProductToCartButton from '../AddProductToCartButton/AddProductToCartButton';
 import ChangeProductNumberInCartButtons from '../ChangeProductNumberInCartButtons/ChangeProductNumberInCartButtons';
-import { Delete } from '@mui/icons-material';
 import RemoveProductButton from '../RemoveProductButton/RemoveProductButton';
+import ErrorAlert from '../ErrorAlert/ErrorAlert';
 
 type ProductCardProps = {
   productInfo: ProductData;
@@ -22,10 +22,22 @@ const ProductCard: FC<ProductCardProps> = ({ productInfo }) => {
   const { data: cartData } = useGetCartQuery(undefined, {
     skip: !isLoggedIn,
   });
-  const currentCount = getProductNumberInCart(
-    cartData?.data.cart.items || [],
-    productInfo.id
+  const [errorMessage, setErrorMessage] = useState<string | undefined>(
+    undefined
   );
+  const [isOpenErrorAlert, setIsOpenErrorAlert] = useState<boolean>(false);
+
+  const currentCount = cartData
+    ? getProductNumberInCart(cartData.data.cart.items, productInfo.id)
+    : 0;
+
+  const closeErrorAlert = () => {
+    setIsOpenErrorAlert(false);
+  };
+
+  const openErrorAlert = () => {
+    setIsOpenErrorAlert(true);
+  };
 
   return (
     <Stack
@@ -51,16 +63,31 @@ const ProductCard: FC<ProductCardProps> = ({ productInfo }) => {
         {`$${productInfo.price}`}
       </Typography>
       {currentCount === 0 ? (
-        <AddProductToCartButton productId={productInfo.id} />
+        <AddProductToCartButton
+          productId={productInfo.id}
+          openErrorMessage={openErrorAlert}
+          setErrorMessage={setErrorMessage}
+        />
       ) : (
         <Stack direction="row" justifyContent="space-evenly" width={'100%'}>
           <ChangeProductNumberInCartButtons
             currentCount={currentCount}
             productId={productInfo.id}
+            openErrorMessage={openErrorAlert}
+            setErrorMessage={setErrorMessage}
           />
-          <RemoveProductButton productId={productInfo.id} />
+          <RemoveProductButton
+            productId={productInfo.id}
+            openErrorMessage={openErrorAlert}
+            setErrorMessage={setErrorMessage}
+          />
         </Stack>
       )}
+      <ErrorAlert
+        errorMessage={errorMessage}
+        isOpen={isOpenErrorAlert}
+        closeAction={closeErrorAlert}
+      />
     </Stack>
   );
 };

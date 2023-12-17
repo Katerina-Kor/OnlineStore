@@ -25,12 +25,19 @@ const navLinksForLoggedUser = navLinksForUnloggedUser.concat({
 const Header: FC = () => {
   const isLoggedIn = useSelector((state: RootState) => state.auth.isLoggedIn);
   const dispatch = useDispatch();
-  const { data: cartData, error: cartError, isLoading } = useGetCartQuery(undefined, {
+  const {
+    data: cartData,
+    error: cartError,
+    isLoading,
+  } = useGetCartQuery(undefined, {
     skip: !isLoggedIn,
   });
 
   useEffect(() => {
-    if (isFetchBaseQueryError(cartError) && cartError.status === HttpStatus.UNAUTHORIZED) {
+    if (
+      isFetchBaseQueryError(cartError) &&
+      cartError.status === HttpStatus.UNAUTHORIZED
+    ) {
       dispatch(setUserLoggedOut());
     }
   }, [cartError]);
@@ -55,7 +62,11 @@ const Header: FC = () => {
             />
             <UserMenu />
             {isLoggedIn && (
-              <CartIcon productsNumber={cartData ? getTotalItems(cartData.data.cart.items) : 0} />
+              <CartIcon
+                productsNumber={
+                  cartData ? getTotalItems(cartData.data.cart.items) : 0
+                }
+              />
             )}
           </Toolbar>
         </AppBar>

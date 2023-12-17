@@ -17,7 +17,7 @@ const Cover: FC<{ isOpen: boolean }> = (props) => {
       open={open}
       onClick={handleClose}
     >
-      <Link component={RouterLink} to="/login" variant="h5" color='secondary'>
+      <Link component={RouterLink} to="/login" variant="h5" color="secondary">
         Please, login to continue
       </Link>
     </Backdrop>

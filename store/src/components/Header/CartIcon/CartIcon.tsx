@@ -14,16 +14,11 @@ const CartIcon: FC<CartIconProps> = ({ productsNumber }) => {
     navigate('/cart');
   };
   return (
-    <Badge
-      badgeContent={productsNumber}
-      color='warning'
-      max={99}
-    >
+    <Badge badgeContent={productsNumber} color="warning" max={99}>
       <IconButton sx={{ p: 0, position: 'relative' }} onClick={handleIconClick}>
         <ShoppingCart fontSize="large" color="primary" />
       </IconButton>
     </Badge>
-    
   );
 };
 

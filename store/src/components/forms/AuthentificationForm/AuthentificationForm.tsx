@@ -3,6 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import { SubmitHandler, useForm } from 'react-hook-form';
 import {
   Button,
+  CircularProgress,
   InputAdornment,
   Link,
   Stack,
@@ -21,7 +22,10 @@ import {
   useLoginUserMutation,
   useRegisterUserMutation,
 } from '../../../store/services/cartService';
-import { getFetchBaseQueryErrorMessage, isFetchBaseQueryError } from '../../../types/apiTypes';
+import {
+  getErrorMessage,
+  isFetchBaseQueryError,
+} from '../../../types/apiTypes';
 
 type PasswordType = 'password' | 'text';
 
@@ -57,10 +61,10 @@ const AuthentificationForm: FC<AuthentificationFormProps> = ({ formType }) => {
       reset();
       dispatch(setUserLoggedIn(loginResult.data.data.token));
       navigate('/products');
-    };
+    }
     if (isFetchBaseQueryError(loginResult.error)) {
       setError('root.serverError', {
-        message: getFetchBaseQueryErrorMessage(loginResult.error),
+        message: getErrorMessage(loginResult.error),
       });
     }
   }, [loginResult]);
@@ -68,7 +72,7 @@ const AuthentificationForm: FC<AuthentificationFormProps> = ({ formType }) => {
   useEffect(() => {
     if (isFetchBaseQueryError(signUpResult.error)) {
       setError('root.serverError', {
-        message: getFetchBaseQueryErrorMessage(signUpResult.error),
+        message: getErrorMessage(signUpResult.error),
       });
     }
   }, [signUpResult]);
@@ -162,7 +166,11 @@ const AuthentificationForm: FC<AuthentificationFormProps> = ({ formType }) => {
             {errors.root?.serverError.message}
           </Typography>
           <Button type="submit" variant="contained" color="primary">
-            {buttonName}
+            {loginResult.isLoading || signUpResult.isLoading ? (
+              <CircularProgress color="inherit" size={25} />
+            ) : (
+              buttonName
+            )}
           </Button>
           <Link
             component={RouterLink}
