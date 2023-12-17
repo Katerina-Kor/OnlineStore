@@ -8,7 +8,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { RootState } from '../../store/store';
 import { setUserLoggedOut } from '../../store/reducers/authSlice';
 import { getTotalItems } from '../../utils/cartHelpers/cartHelpers';
-import { isFetchBaseQueryError } from '../../types/apiTypes';
+import { HttpStatus, isFetchBaseQueryError } from '../../types/apiTypes';
 
 const navLinksForUnloggedUser = [
   {
@@ -30,7 +30,7 @@ const Header: FC = () => {
   });
 
   useEffect(() => {
-    if (isFetchBaseQueryError(cartError) && cartError.status === 401) {
+    if (isFetchBaseQueryError(cartError) && cartError.status === HttpStatus.UNAUTHORIZED) {
       dispatch(setUserLoggedOut());
     }
   }, [cartError]);
