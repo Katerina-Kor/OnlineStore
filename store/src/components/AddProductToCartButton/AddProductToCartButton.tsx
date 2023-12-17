@@ -1,4 +1,4 @@
-import { Button } from '@mui/material';
+import { Button, CircularProgress } from '@mui/material';
 import { FC, useEffect } from 'react';
 import { useUpdateCartMutation } from '../../store/services/cartService';
 import {
@@ -44,9 +44,12 @@ const AddProductToCartButton: FC<AddProductToCartButtonProps> = ({
         }
         variant="contained"
         type="button"
-        sx={{ width: 'fit-content' }}
+        sx={{ width: 135 }}
       >
-        Add to cart
+        {updateCartResult.isLoading
+          ? <CircularProgress color="inherit" size={25} />
+          : 'Add to cart'
+        }
       </Button>
     </>
   );
