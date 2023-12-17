@@ -1,17 +1,17 @@
 import { Button, CircularProgress } from '@mui/material';
 import { FC, useEffect } from 'react';
-import { useUpdateCartMutation } from '../../store/services/cartService';
+import { useUpdateCartMutation } from '../../../store/services/cartService';
 import {
   HttpStatus,
   getErrorMessage,
   isFetchBaseQueryError,
-} from '../../types/apiTypes';
+} from '../../../types/apiTypes';
 import { useDispatch } from 'react-redux';
-import { setUserLoggedOut } from '../../store/reducers/authSlice';
+import { setUserLoggedOut } from '../../../store/reducers/authSlice';
 import {
   setErrorMessage,
   setShowErrorAlert,
-} from '../../store/reducers/errorAlertSlice';
+} from '../../../store/reducers/errorAlertSlice';
 
 type AddProductToCartButtonProps = {
   productId: string;

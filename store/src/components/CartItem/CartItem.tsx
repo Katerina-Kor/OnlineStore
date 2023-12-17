@@ -2,8 +2,8 @@ import { FC } from 'react';
 import { ProductsInfoInCart } from '../../types/apiTypes';
 import { ImageListItem, Stack, Typography } from '@mui/material';
 import noImage from '../../assets/img/no-image-icon-23485.png';
-import ChangeProductNumberInCartButtons from '../ChangeProductNumberInCartButtons/ChangeProductNumberInCartButtons';
-import RemoveProductButton from '../RemoveProductButton/RemoveProductButton';
+import ChangeProductNumberInCartButtons from '../buttons/ChangeProductNumberInCartButtons/ChangeProductNumberInCartButtons';
+import RemoveProductButton from '../buttons/RemoveProductButton/RemoveProductButton';
 
 type CartItemProps = {
   cartItem: ProductsInfoInCart;

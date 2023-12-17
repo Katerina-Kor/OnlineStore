@@ -1,9 +1,9 @@
 import { FC, useEffect } from 'react';
 import { useParams } from 'react-router-dom';
-import { useGetProductQuery } from '../../store/services/cartService';
+import { useGetProductQuery } from '../../../../store/services/cartService';
 import { useSelector } from 'react-redux';
-import { RootState } from '../../store/store';
-import Cover from '../Cover/Cover';
+import { RootState } from '../../../../store/store';
+import Cover from '../../../Cover/Cover';
 import { Stack, Typography } from '@mui/material';
 
 const DetailedProductCard: FC = () => {

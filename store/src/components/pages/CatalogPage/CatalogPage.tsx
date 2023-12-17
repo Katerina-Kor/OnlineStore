@@ -11,7 +11,7 @@ import {
   getErrorMessage,
   isFetchBaseQueryError,
 } from '../../../types/apiTypes';
-import ErrorFallback from '../../ErrorFallback/ErrorFallback';
+import ErrorFallback from '../../fallbacks/ErrorFallback/ErrorFallback';
 
 const CatalogPage: FC = () => {
   const isLoggedIn = useSelector((state: RootState) => state.auth.isLoggedIn);

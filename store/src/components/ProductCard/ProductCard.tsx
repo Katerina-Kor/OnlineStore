@@ -7,9 +7,9 @@ import { useGetCartQuery } from '../../store/services/cartService';
 import { useSelector } from 'react-redux';
 import { RootState } from '../../store/store';
 import noImage from '../../assets/img/no-image-icon-23485.png';
-import AddProductToCartButton from '../AddProductToCartButton/AddProductToCartButton';
-import ChangeProductNumberInCartButtons from '../ChangeProductNumberInCartButtons/ChangeProductNumberInCartButtons';
-import RemoveProductButton from '../RemoveProductButton/RemoveProductButton';
+import AddProductToCartButton from '../buttons/AddProductToCartButton/AddProductToCartButton';
+import ChangeProductNumberInCartButtons from '../buttons/ChangeProductNumberInCartButtons/ChangeProductNumberInCartButtons';
+import RemoveProductButton from '../buttons/RemoveProductButton/RemoveProductButton';
 
 type ProductCardProps = {
   productInfo: ProductData;

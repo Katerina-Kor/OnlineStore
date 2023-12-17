@@ -10,15 +10,15 @@ import {
 import CartItem from '../../CartItem/CartItem';
 import { isCartEmpty } from '../../../utils/cartHelpers/cartHelpers';
 import Cover from '../../Cover/Cover';
-import CreateOrderFallback from '../../CreateOrderFallback/CreateOrderFallback';
+import CreateOrderFallback from '../../fallbacks/CreateOrderFallback/CreateOrderFallback';
 import {
   HttpStatus,
   getErrorMessage,
   isFetchBaseQueryError,
 } from '../../../types/apiTypes';
 import { setUserLoggedOut } from '../../../store/reducers/authSlice';
-import ErrorFallback from '../../ErrorFallback/ErrorFallback';
-import EmptyCartFallback from '../../EmptyCartFallback/EmptyCartFallback';
+import ErrorFallback from '../../fallbacks/ErrorFallback/ErrorFallback';
+import EmptyCartFallback from '../../fallbacks/EmptyCartFallback/EmptyCartFallback';
 import {
   setErrorMessage,
   setShowErrorAlert,
