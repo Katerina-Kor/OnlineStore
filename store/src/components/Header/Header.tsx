@@ -54,8 +54,8 @@ const Header: FC = () => {
               }
             />
             <UserMenu />
-            {cartData && (
-              <CartIcon productsNumber={getTotalItems(cartData.data.cart.items)} />
+            {isLoggedIn && (
+              <CartIcon productsNumber={cartData ? getTotalItems(cartData.data.cart.items) : 0} />
             )}
           </Toolbar>
         </AppBar>
