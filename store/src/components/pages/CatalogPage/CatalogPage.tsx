@@ -5,7 +5,7 @@ import { RootState } from '../../../store/store';
 import { useGetProductsListQuery } from '../../../store/services/cartService';
 import { setUserLoggedOut } from '../../../store/reducers/authSlice';
 import ProductCard from '../../ProductCard/ProductCard';
-import Cover from '../../Cover/Cover';
+import LogoutFallback from '../../fallbacks/LogoutFallback/LogoutFallback';
 import {
   HttpStatus,
   getErrorMessage,
@@ -34,7 +34,7 @@ const CatalogPage: FC = () => {
   }, [productsError]);
 
   if (!isLoggedIn) {
-    return <Cover isOpen />;
+    return <LogoutFallback isOpen />;
   }
 
   return (

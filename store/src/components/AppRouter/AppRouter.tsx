@@ -3,7 +3,7 @@ import { Route, Routes } from 'react-router-dom';
 import MainPage from '../pages/MainPage/MainPage';
 import LoginPage from '../pages/LoginPage/LoginPage';
 import RegisterPage from '../pages/RegisterPage/RegisterPage';
-import DetailedProductCard from '../pages/DetailedProductPage/DetailedProductCard/DetailedProductCard';
+import DetailedProductPage from '../pages/DetailedProductPage/DetailedProductCard/DetailedProductPage';
 import CartPage from '../pages/CartPage/CartPage';
 import CatalogPage from '../pages/CatalogPage/CatalogPage';
 
@@ -15,7 +15,7 @@ const AppRouter: FC = () => {
       <Route path="register" element={<RegisterPage />} />
       <Route path="products">
         <Route index element={<CatalogPage />} />
-        <Route path=":productId" element={<DetailedProductCard />} />
+        <Route path=":productId" element={<DetailedProductPage />} />
       </Route>
       <Route path="cart" element={<CartPage />} />
       <Route path="*" element={<div>Sorry, something went wrong...</div>} />

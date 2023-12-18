@@ -2,7 +2,7 @@ import { Backdrop, Link } from '@mui/material';
 import { Link as RouterLink, useNavigate } from 'react-router-dom';
 import { FC, useState } from 'react';
 
-const Cover: FC<{ isOpen: boolean }> = (props) => {
+const LogoutFallback: FC<{ isOpen: boolean }> = (props) => {
   const [open, setOpen] = useState(props.isOpen);
   const navigate = useNavigate();
 
@@ -24,4 +24,4 @@ const Cover: FC<{ isOpen: boolean }> = (props) => {
   );
 };
 
-export default Cover;
+export default LogoutFallback;

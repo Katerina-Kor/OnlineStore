@@ -9,7 +9,7 @@ import {
 } from '../../../store/services/cartService';
 import CartItem from '../../CartItem/CartItem';
 import { isCartEmpty } from '../../../utils/cartHelpers/cartHelpers';
-import Cover from '../../Cover/Cover';
+import LogoutFallback from '../../fallbacks/LogoutFallback/LogoutFallback';
 import CreateOrderFallback from '../../fallbacks/CreateOrderFallback/CreateOrderFallback';
 import {
   HttpStatus,
@@ -38,6 +38,7 @@ const CartPage: FC = () => {
   const [createOrder, createOrderResult] = useCreateOrderMutation();
 
   useEffect(() => {
+    if (!cartError) return;
     if (
       isFetchBaseQueryError(cartError) &&
       cartError.status === HttpStatus.UNAUTHORIZED
@@ -60,6 +61,7 @@ const CartPage: FC = () => {
   }, [updateCartResult.error]);
 
   useEffect(() => {
+    if (!createOrderResult.error) return;
     if (
       isFetchBaseQueryError(createOrderResult.error) &&
       createOrderResult.error.status === HttpStatus.UNAUTHORIZED
@@ -94,7 +96,7 @@ const CartPage: FC = () => {
   }
 
   if (!isLoggedIn) {
-    return <Cover isOpen />;
+    return <LogoutFallback isOpen />;
   }
 
   return (
