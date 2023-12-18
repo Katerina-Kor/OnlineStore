@@ -2,6 +2,10 @@ import { KeyboardArrowLeft, KeyboardArrowRight } from '@mui/icons-material';
 import { Box, Button, ImageListItem, MobileStepper } from '@mui/material';
 import { useState } from 'react';
 import noImage from '../../assets/img/no-image-icon-23485.png';
+import noImage2 from '../../assets/img/image-icon-front-side.jpg';
+import noImage3 from '../../assets/img/no-image2.jpg';
+
+const images = [noImage, noImage2, noImage3];
 
 export default function ImageCarousel() {
   const [activeStep, setActiveStep] = useState(0);
@@ -18,7 +22,7 @@ export default function ImageCarousel() {
   return (
     <Box sx={{ maxWidth: 400, flexGrow: 1 }} margin={0}>
       <ImageListItem component={'div'} sx={{ width: '100%' }}>
-        <img src={noImage} alt="product image" loading="lazy" />
+        <img src={images[activeStep]} alt="product image" loading="lazy" />
       </ImageListItem>
       <MobileStepper
         variant="dots"
