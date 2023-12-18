@@ -6,6 +6,7 @@ import RegisterPage from '../pages/RegisterPage/RegisterPage';
 import DetailedProductPage from '../pages/DetailedProductPage/DetailedProductCard/DetailedProductPage';
 import CartPage from '../pages/CartPage/CartPage';
 import CatalogPage from '../pages/CatalogPage/CatalogPage';
+import ErrorPage from '../pages/ErrorPage/ErrorPage';
 
 const AppRouter: FC = () => {
   return (
@@ -18,7 +19,7 @@ const AppRouter: FC = () => {
         <Route path=":productId" element={<DetailedProductPage />} />
       </Route>
       <Route path="cart" element={<CartPage />} />
-      <Route path="*" element={<div>Sorry, something went wrong...</div>} />
+      <Route path="*" element={<ErrorPage />} />
     </Routes>
   );
 };
