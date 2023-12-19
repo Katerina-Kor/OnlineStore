@@ -22,10 +22,7 @@ import {
   useLoginUserMutation,
   useRegisterUserMutation,
 } from '../../../store/services/cartService';
-import {
-  getErrorMessage,
-  isFetchBaseQueryError,
-} from '../../../types/apiTypes';
+import { getErrorMessage, isFetchBaseQueryError } from '../../../utils/errorHelpers/errorHelpers';
 
 type PasswordType = 'password' | 'text';
 

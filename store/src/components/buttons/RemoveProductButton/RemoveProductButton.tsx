@@ -6,13 +6,12 @@ import { setUserLoggedOut } from '../../../store/reducers/authSlice';
 import { useDispatch } from 'react-redux';
 import {
   HttpStatus,
-  getErrorMessage,
-  isFetchBaseQueryError,
 } from '../../../types/apiTypes';
 import {
   setErrorMessage,
   setShowErrorAlert,
 } from '../../../store/reducers/errorAlertSlice';
+import { getErrorMessage, isFetchBaseQueryError } from '../../../utils/errorHelpers/errorHelpers';
 
 type RemoveProductButtonProps = {
   productId: string;

@@ -8,10 +8,9 @@ import ProductCard from '../../ProductCard/ProductCard';
 import LogoutFallback from '../../fallbacks/LogoutFallback/LogoutFallback';
 import {
   HttpStatus,
-  getErrorMessage,
-  isFetchBaseQueryError,
 } from '../../../types/apiTypes';
 import ErrorFallback from '../../fallbacks/ErrorFallback/ErrorFallback';
+import { getErrorMessage, isFetchBaseQueryError } from '../../../utils/errorHelpers/errorHelpers';
 
 const CatalogPage: FC = () => {
   const isLoggedIn = useSelector((state: RootState) => state.auth.isLoggedIn);

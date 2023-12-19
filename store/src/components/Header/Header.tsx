@@ -8,7 +8,8 @@ import { useDispatch, useSelector } from 'react-redux';
 import { RootState } from '../../store/store';
 import { setUserLoggedOut } from '../../store/reducers/authSlice';
 import { getTotalItems } from '../../utils/cartHelpers/cartHelpers';
-import { HttpStatus, isFetchBaseQueryError } from '../../types/apiTypes';
+import { HttpStatus } from '../../types/apiTypes';
+import { isFetchBaseQueryError } from '../../utils/errorHelpers/errorHelpers';
 
 const navLinksForUnloggedUser = [
   {

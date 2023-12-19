@@ -16,10 +16,9 @@ import { getProductNumberInCart } from '../../../../utils/cartHelpers/cartHelper
 import ErrorFallback from '../../../fallbacks/ErrorFallback/ErrorFallback';
 import {
   HttpStatus,
-  getErrorMessage,
-  isFetchBaseQueryError,
 } from '../../../../types/apiTypes';
 import { setUserLoggedOut } from '../../../../store/reducers/authSlice';
+import { getErrorMessage, isFetchBaseQueryError } from '../../../../utils/errorHelpers/errorHelpers';
 
 const DetailedProductPage: FC = () => {
   const { productId = '' } = useParams();
