@@ -1,0 +1,35 @@
+.navLink_active {
+  margin: 8px 12px;
+  font-family: 'Roboto', 'Helvetica', 'Arial', sans-serif;
+  font-weight: 500;
+  font-size: 0.875rem;
+  line-height: 1.75;
+  letter-spacing: 0.02857em;
+  text-transform: uppercase;
+  -webkit-text-decoration: underline;
+  text-decoration: underline;
+  text-decoration-color: rgba(26, 117, 209, 0.4);
+  color: rgba(26, 117, 209, 0.87);
+}
+
+.navLink_active:hover {
+  text-decoration-color: inherit;
+}
+
+.navLink {
+  margin: 8px 12px;
+  font-family: 'Roboto', 'Helvetica', 'Arial', sans-serif;
+  font-weight: 500;
+  font-size: 0.875rem;
+  line-height: 1.75;
+  letter-spacing: 0.02857em;
+  text-transform: uppercase;
+  color: rgba(0, 0, 0, 0.87);
+  -webkit-text-decoration: underline;
+  text-decoration: underline;
+  text-decoration-color: rgba(0, 0, 0, 0.4);
+}
+
+.navLink:hover {
+  text-decoration-color: inherit;
+}
